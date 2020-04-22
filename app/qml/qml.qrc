@@ -1,0 +1,46 @@
+<RCC>
+	<qresource prefix="/">
+		<file>Controls/CBusyIndicator.qml</file>
+		<file>Controls/CButton.qml</file>
+		<file>Controls/CCheckBox.qml</file>
+		<file>Controls/CComboBox.qml</file>
+		<file>Controls/CComboBoxPopup.qml</file>
+		<file>Controls/CDecorationLine.qml</file>
+		<file>Controls/CDelayButton.qml</file>
+		<file>Controls/CDial.qml</file>
+		<file>Controls/CDrawer.qml</file>
+		<file>Controls/CGroupBox.qml</file>
+		<file>Controls/CIconButton.qml</file>
+		<file>Controls/CIconText.qml</file>
+		<file>Controls/CImage.qml</file>
+		<file>Controls/CMenu.qml</file>
+		<file>Controls/CMenuItem.qml</file>
+		<file>Controls/CPageIndicator.qml</file>
+		<file>Controls/CPopup.qml</file>
+		<file>Controls/CProgressBar.qml</file>
+		<file>Controls/CRadioButton.qml</file>
+		<file>Controls/CRadioIndicator.qml</file>
+		<file>Controls/CRangeSlider.qml</file>
+		<file>Controls/CScrollBar.qml</file>
+		<file>Controls/CSearchField.qml</file>
+		<file>Controls/CSlider.qml</file>
+		<file>Controls/CSliderHandle.qml</file>
+		<file>Controls/CSpinBox.qml</file>
+		<file>Controls/CSwitch.qml</file>
+		<file>Controls/CSwitchIndicator.qml</file>
+		<file>Controls/CTabBar.qml</file>
+		<file>Controls/CTabButton.qml</file>
+		<file>Controls/CText.qml</file>
+		<file>Controls/CTextArea.qml</file>
+		<file>Controls/CTextField.qml</file>
+		<file>Controls/CTextInputCursor.qml</file>
+		<file>Controls/CToolTip.qml</file>
+		<file>Controls/CToolTipBackground.qml</file>
+		<file>Controls/CWindowHeaderButton.qml</file>
+		<file>Controls/WindowHeader.qml</file>
+		<file>main.qml</file>
+		<file>Utils.js</file>
+		<file>Widgets/CustomWindowAreaWidget.qml</file>
+		<file>Widgets/WidgetMain.qml</file>
+	</qresource>
+</RCC>

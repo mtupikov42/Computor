@@ -1,0 +1,13 @@
+<RCC>
+    <qresource>
+        <file>fonts/Font-Awesome-5-Brands-Regular-400.otf</file>
+        <file>fonts/Font-Awesome-5-Free-Regular-400.otf</file>
+        <file>fonts/Font-Awesome-5-Free-Solid-900.otf</file>
+        <file>fonts/Roboto-Black.ttf</file>
+        <file>fonts/Roboto-BlackItalic.ttf</file>
+        <file>fonts/Roboto-Bold.ttf</file>
+        <file>fonts/Roboto-BoldItalic.ttf</file>
+        <file>fonts/Roboto-Italic.ttf</file>
+        <file>fonts/Roboto-Regular.ttf</file>
+    </qresource>
+</RCC>

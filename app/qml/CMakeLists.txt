@@ -1,0 +1,51 @@
+set(qml
+	Controls/CBusyIndicator.qml
+	Controls/CButton.qml
+	Controls/CCheckBox.qml
+	Controls/CComboBox.qml
+	Controls/CComboBoxPopup.qml
+	Controls/CDecorationLine.qml
+	Controls/CDelayButton.qml
+	Controls/CDial.qml
+	Controls/CDrawer.qml
+	Controls/CGroupBox.qml
+	Controls/CIconButton.qml
+	Controls/CIconText.qml
+	Controls/CImage.qml
+	Controls/CMenu.qml
+	Controls/CMenuItem.qml
+	Controls/CPageIndicator.qml
+	Controls/CPopup.qml
+	Controls/CProgressBar.qml
+	Controls/CRadioButton.qml
+	Controls/CRadioIndicator.qml
+	Controls/CRangeSlider.qml
+	Controls/CScrollBar.qml
+	Controls/CSearchField.qml
+	Controls/CSlider.qml
+	Controls/CSliderHandle.qml
+	Controls/CSpinBox.qml
+	Controls/CSwitch.qml
+	Controls/CSwitchIndicator.qml
+	Controls/CTabBar.qml
+	Controls/CTabButton.qml
+	Controls/CText.qml
+	Controls/CTextArea.qml
+	Controls/CTextField.qml
+	Controls/CTextInputCursor.qml
+	Controls/CToolTip.qml
+	Controls/CToolTipBackground.qml
+	Controls/CWindowHeaderButton.qml
+	Controls/WindowHeader.qml
+
+	Widgets/CustomWindowAreaWidget.qml
+	Widgets/WidgetMain.qml
+
+	main.qml
+)
+
+set(resources
+	qml.qrc
+)
+
+add_subdir()
