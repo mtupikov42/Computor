@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.12)
 
-set(APP_NAME "AppName" CACHE STRING "Application Name")
-set(APP_COMPANY_NAME "AppCompanyName" CACHE STRING "Application Company Name")
+set(APP_NAME "Computor" CACHE STRING "Application Name")
+set(APP_COMPANY_NAME "Unit Factory" CACHE STRING "Application Company Name")
 set(APP_ROOT_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/out")
 
 project(${APP_NAME} LANGUAGES CXX)
@@ -29,7 +29,7 @@ endif()
 include("AddDirectory")
 include("Utils")
 
-set(APP_VERSION_STRING "0.1.0" CACHE STRING "Application Version String")
+set(APP_VERSION_STRING "1.0.0" CACHE STRING "Application Version String")
 parse_version_string("${APP_VERSION_STRING}" APP_VERSION_MAJOR APP_VERSION_MINOR APP_VERSION_PATCH)
 
 add_subdirectory(algorithm_utils)
