@@ -9,6 +9,9 @@
 #include <app_config.h>
 #include <StandardPaths.h>
 
+#include "EBST.h"
+#include "ExpressionException.h"
+
 #include "Core/UIManager.h"
 #include "Core/Logger.h"
 #include "Utils/MetadataInitializer.h"
@@ -73,6 +76,16 @@ int main(int argc, char** argv) {
 
 	Logger logger;
 	MetadataInitializer::registerAllMeta();
+
+	try {
+		EBST ebst("x^2 + 10 * x - 50.3");
+		const auto sols = ebst.solution().solutions;
+		for (const auto& s : sols) {
+			qCInfo(L::init) << QString::fromStdString(s.varName) << QString::fromStdString(s.varResult);
+		}
+	} catch (ExpressionException& ex) {
+		qCCritical(L::init) << QString::fromStdString(ex.toString()) << ex.column();
+	}
 
 	setupGraphics();
 	setupSettings();

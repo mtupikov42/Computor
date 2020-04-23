@@ -38,6 +38,7 @@ endif()
 target_link_libraries(libSource
 	algorithm_utils
 	app_config
+	ebst
 	standard_paths
 	QmlPlugins
 	Qt5::Core
