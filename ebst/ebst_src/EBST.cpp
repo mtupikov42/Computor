@@ -84,7 +84,6 @@ EBST::EBST(const std::string& expressionString) {
 	const auto spreadedSubtrees = spreadSubtrees(leftSubtrees);
 	m_rootNode = buildTreeFromVectorOfNodes(spreadedSubtrees);
 	m_reducedTreeRootNode = buildReducedFormTree(m_rootNode);
-	m_balancedTreeRootNode = buildBalancedTree(m_reducedTreeRootNode);
 	m_balancedTreeRootNode = buildBalancedTree(m_reducedTreeRootNode, m_degreeSubtrees);
 
 	if (!treeIsBalanced()) {
@@ -97,7 +96,9 @@ EBST::EBST(const std::string& expressionString) {
 		}
 	}
 
-	solveExpression();
+	if (m_rootNode) {
+		solveExpression();
+	}
 }
 
 std::string EBST::toString(OutputType type) const {
