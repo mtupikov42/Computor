@@ -123,8 +123,6 @@ ExpressionNode ExpressionNode::operator-(const ExpressionNode& rhs) const {
 
 ExpressionNode ExpressionNode::operator%(const ExpressionNode& rhs) const {
     auto result = std::remainder(operandValue().value, rhs.operandValue().value);
-    std::cout << operandValue().value << " " << rhs.operandValue().value << std::endl;
-    std::cout << result << std::endl;
     return ExpressionNode(result);
 }
 

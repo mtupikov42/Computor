@@ -84,23 +84,43 @@ private:
 		Rule6 = Subtree * NumberAndSubtreeAddSub * AdditionSubstitution, // (A +- (n +- B)) -> (n +- (A +- B))
 	};
 
+	using SubtreesByDegree = std::map<int, std::vector<SubtreeWithOperator>>;
+
 	friend NodeRule operator|(NodeRule a, NodeRule b);
 	std::string toString(const NodeRule rule) const;
 
 	std::vector<ExpressionNode> parseExpression(const std::string& expressionString);
 
-    void buildTree(const std::vector<ExpressionNode>& expressionString);
+	NodePtr buildTree(const std::vector<ExpressionNode>& expressionString);
 
 	// NodeReduce.cpp
 	NodePtr buildReducedFormTree(const NodePtr& node);
 	NodePtr reduceNode(const NodePtr& parent) const;
 
 	// NodeBalancing.cpp
-	NodePtr buildBalancedTree(const NodePtr& node);
-	void splitSubtreesByDegree(const NodePtr& root);
-	void distributeSubtrees(const NodePtr& node, OperatorType parentOp, OperatorType subParentOp, bool isLeft);
-	void insertNodeIntoDegreeSubtreesMap(const NodePtr& ptr, int power, OperatorType type, bool isLeft);
-	NodePtr buildTreeFromVectorOfNodes(const std::vector<SubtreeWithOperator>& vec, bool hasParentTree = false, bool isBalancedFirst = false) const;
+	NodePtr buildBalancedTree(const NodePtr& node, SubtreesByDegree& degreeSubtrees);
+	void splitSubtreesByDegree(const NodePtr& root, SubtreesByDegree& degreeSubtrees);
+	void distributeSubtrees(
+	    const NodePtr& node,
+	    SubtreesByDegree& degreeSubtrees,
+	    OperatorType parentOp,
+	    OperatorType subParentOp,
+	    bool isLeft
+	);
+	void insertNodeIntoDegreeSubtreesMap(
+	    const NodePtr& ptr,
+	    SubtreesByDegree& degreeSubtrees,
+	    int power,
+	    OperatorType type,
+	    bool isLeft
+	);
+	std::vector<SubtreeWithOperator> spreadSubtrees(SubtreesByDegree& degreeSubtrees);
+	NodePtr uniteSubtrees(std::vector<SubtreeWithOperator>& vec, int degree, bool first);
+	NodePtr buildTreeFromVectorOfNodes(
+	    const std::vector<SubtreeWithOperator>& vec,
+	    bool hasParentTree = false,
+	    bool isBalancedFirst = false
+	) const;
 	bool treeIsBalanced() const;
 
 	// NodeOutput.cpp
@@ -135,6 +155,7 @@ private:
 
 	// NodeHelpers.cpp
 	NodePtr allocateNode(const ExpressionNode& node) const;
+	NodePtr createNodeByDegreeAndValue(double value, int degree) const;
 	ExpressionNode getExpressionNode(const NodePtr& ptr) const;
 	bool subTreesAreEqual(const NodePtr& n1, const NodePtr& n2) const;
 	bool nodeHasUnknownExpr(const NodePtr& ptr) const;
@@ -143,6 +164,8 @@ private:
 	bool nodeHasChildren(const NodePtr& node) const;
 	int calculateMaxDegree() const;
 	double retrieveNumberFromNode(const NodePtr& node, OperatorType prevOp, bool isFirst) const;
+	void mirrorNodeSign(SubtreeWithOperator& ptr);
+	void mirrorNodeSignByPrevOp(NodePtr& node, OperatorType& op);
 
 	// NodeSolver.cpp
 	void solveExpression();
@@ -155,7 +178,7 @@ private:
 	// members
 	NodePtr m_balancedTreeRootNode;
     NodePtr m_reducedTreeRootNode;
-	std::map<int, std::vector<SubtreeWithOperator>> m_degreeSubtrees;
+	SubtreesByDegree m_degreeSubtrees;
 	ExpressionSolution m_solution;
 	int m_maxDegree = 0;
 	bool m_isBalanced = false;

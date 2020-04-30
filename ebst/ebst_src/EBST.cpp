@@ -8,15 +8,89 @@
 #include <algorithm>
 #include <set>
 
+namespace {
+
+const auto equalSign = '=';
+const auto equalToZero = " = 0";
+
+std::vector<std::string> splitStringByEqualSign(const std::string& s) {
+	auto next = 0U;
+	auto last = 0U;
+	std::vector<std::string> vec;
+
+	while ((next = s.find(equalSign, last)) != std::string::npos) {
+		vec.push_back(s.substr(last, next - last));
+		last = next + 1;
+	}
+	vec.push_back(s.substr(last));
+
+	return vec;
+}
+
+} // end anonymous namespace
+
 EBST::EBST(const std::string& expressionString) {
-    auto parsedExp = parseExpression(expressionString);
-    buildTree(parsedExp);
+	auto i = 0;
+	for (const auto c : expressionString) {
+		if (c == equalSign) {
+			++i;
+		}
+	}
+
+	if (i == 0) {
+		throw ExpressionException(ExpressionError::NoEqualSign, 0);
+	}
+
+	if (i > 1) {
+		throw ExpressionException(ExpressionError::TooManyEqualSigns, 0);
+	}
+
+	const auto exprVec = splitStringByEqualSign(expressionString);
+	assert(exprVec.size() == 2);
+
+	auto leftExp = parseExpression(exprVec[0]);
+	auto leftRoot = buildTree(leftExp);
+
+	auto rightExp = parseExpression(exprVec[1]);
+	auto rightRoot = buildTree(rightExp);
+
+	auto leftReducedTreeRootNode = buildReducedFormTree(leftRoot);
+	SubtreesByDegree leftSubtrees;
+	auto leftBalancedTreeRootNode = buildBalancedTree(leftReducedTreeRootNode, leftSubtrees);
+
+	auto rightReducedTreeRootNode = buildReducedFormTree(rightRoot);
+	SubtreesByDegree rightSubtrees;
+	auto rightBalancedTreeRootNode = buildBalancedTree(rightReducedTreeRootNode, rightSubtrees);
+
+	// mirror +- for right side
+	for (auto& pair : rightSubtrees) {
+		for (auto& subtree : pair.second) {
+			mirrorNodeSign(subtree);
+		}
+	}
+
+	// merge two maps with vectors
+	auto first = rightSubtrees.begin();
+	auto last = rightSubtrees.end();
+	for (; first != last; ++first) {
+		auto ins = leftSubtrees.insert(*first);
+		if (!ins.second) {
+			auto& rhsVec = first->second;
+			auto& lhsVec = ins.first->second;
+			lhsVec.insert(lhsVec.end(), rhsVec.begin(), rhsVec.end());
+		}
+	}
+
+	const auto spreadedSubtrees = spreadSubtrees(leftSubtrees);
+	m_rootNode = buildTreeFromVectorOfNodes(spreadedSubtrees);
 	m_reducedTreeRootNode = buildReducedFormTree(m_rootNode);
 	m_balancedTreeRootNode = buildBalancedTree(m_reducedTreeRootNode);
+	m_balancedTreeRootNode = buildBalancedTree(m_reducedTreeRootNode, m_degreeSubtrees);
 
 	if (!treeIsBalanced()) {
+		// I don't think it actually will balance more, but who knows
 		m_reducedTreeRootNode = buildReducedFormTree(m_balancedTreeRootNode);
-		m_balancedTreeRootNode = buildBalancedTree(m_reducedTreeRootNode);
+		m_balancedTreeRootNode = buildBalancedTree(m_reducedTreeRootNode, m_degreeSubtrees);
 
 		if (!treeIsBalanced()) {
 			throw ExpressionException(ExpressionError::CannotBalance, 0);
@@ -27,16 +101,18 @@ EBST::EBST(const std::string& expressionString) {
 }
 
 std::string EBST::toString(OutputType type) const {
+	std::string output;
+
     switch (type) {
     case OutputType::InfixWithParentheses:
-    case OutputType::Infix: return outputInfix(m_rootNode, type == OutputType::InfixWithParentheses);
-    case OutputType::Postfix: return outputPostfix(m_rootNode);
-    case OutputType::Prefix: return outputPrefix(m_rootNode);
+	case OutputType::Infix: output = outputInfix(m_rootNode, type == OutputType::InfixWithParentheses); break;
+	case OutputType::Postfix: output = outputPostfix(m_rootNode); break;
+	case OutputType::Prefix: output = outputPrefix(m_rootNode); break;
     case OutputType::ReducedInfixWithParentheses:
-	case OutputType::ReducedInfix: return outputInfix(m_balancedTreeRootNode, type == OutputType::ReducedInfixWithParentheses);
+	case OutputType::ReducedInfix: output = outputInfix(m_balancedTreeRootNode, type == OutputType::ReducedInfixWithParentheses); break;
     }
 
-	return {};
+	return output + equalToZero;
 }
 
 int EBST::maxDegree() const {
@@ -51,9 +127,10 @@ ExpressionSolution EBST::solution() const {
 	return m_solution;
 }
 
-void EBST::buildTree(const std::vector<ExpressionNode>& expr) {
+EBST::NodePtr EBST::buildTree(const std::vector<ExpressionNode>& expr) {
     std::stack<EBST::NodePtr> stack;
-    EBST::NodePtr t;
+	NodePtr t;
+	NodePtr root;
 
     for (const auto& node : expr) {
         auto pair = std::make_pair(node, false);
@@ -71,8 +148,10 @@ void EBST::buildTree(const std::vector<ExpressionNode>& expr) {
         stack.push(t);
     }
 
-    m_rootNode = stack.top();
+	root = stack.top();
     stack.pop();
+
+	return root;
 }
 
 std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr) {

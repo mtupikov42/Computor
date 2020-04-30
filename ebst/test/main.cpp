@@ -77,8 +77,9 @@ void operatorTest() {
 
 void ebstTest() {
 	try {
-		const auto tree = EBST("x - X + x * x - 10 * (10 * X)");
-		assert(tree.toString(EBST::OutputType::ReducedInfix).compare("-100.0 * x + x ^ 2.0") == 0);
+		const auto tree = EBST("x - x + x * x - 10 * (10 * x) = 0");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("-100.0 * x + x ^ 2.0 = 0") == 0);
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 2);
@@ -94,45 +95,67 @@ void ebstTest() {
 		assert(false);
 	}
 
-	 try {
-		 const auto tree = EBST("(x^2 + (-10.123450 * 660000) + x / 100)");
-		 assert(tree.toString(EBST::OutputType::ReducedInfix).compare("-6681477.0 + x / 100.0 + x ^ 2.0") == 0);
+	try {
+		const auto tree = EBST("x ^ 2 - 10 * x + 5 * x ^ 2 = -10 + 5 * x + x ^ 2 - x");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("10.0 - 14.0 * x + 5.0 * x ^ 2.0 = 0") == 0);
 
-		 const auto result = tree.solution().solutions;
-		 assert(result.size() == 2);
+		const auto result = tree.solution().solutions;
+		assert(result.size() == 2);
 
-		 auto res1 = result[0];
-		 auto res2 = result[1];
-		 assert(res1.varName == "x1");
-		 assert(res1.varResult == trimToStringDouble(-2584.860315));
-		 assert(res2.varName == "x2");
-		 assert(res2.varResult == trimToStringDouble(2584.850315));
-	 } catch (const ExpressionException& ex) {
-		 std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
-		 assert(false);
-	 }
-
-	 try {
-		 const auto tree = EBST("-10 * x^2 - -4 * x + 7 + x");
-		 assert(tree.toString(EBST::OutputType::ReducedInfix).compare("7.0 + 5.0 * x + -10.0 * x ^ 2.0") == 0);
-
-		 const auto result = tree.solution().solutions;
-		 assert(result.size() == 2);
-
-		 auto res1 = result[0];
-		 auto res2 = result[1];
-		 assert(res1.varName == "x1");
-		 assert(res1.varResult == trimToStringDouble(1.123212));
-		 assert(res2.varName == "x2");
-		 assert(res2.varResult == trimToStringDouble(-0.623212));
-	 } catch (const ExpressionException& ex) {
-		 std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
-		 assert(false);
-	 }
+		auto res1 = result[0];
+		auto res2 = result[1];
+		assert(res1.varName == "x1");
+		assert(res1.varResult == "1.40-0.20i");
+		assert(res2.varName == "x2");
+		assert(res2.varResult == "1.40+0.20i");
+	} catch (const ExpressionException& ex) {
+		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
+		assert(false);
+	}
 
 	try {
-		const auto tree = EBST("(x ^ 2) * 11 - (x ^ 2) * 2");
-		assert(tree.toString(EBST::OutputType::ReducedInfix).compare("9.0 * x ^ 2.0") == 0);
+		const auto tree = EBST("(x^2 + (-10.123450 * 660000) + x / 100) = 0");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("-6681477.0 + 0.010 * x + x ^ 2.0 = 0") == 0);
+
+		const auto result = tree.solution().solutions;
+		assert(result.size() == 2);
+
+		auto res1 = result[0];
+		auto res2 = result[1];
+		assert(res1.varName == "x1");
+		assert(res1.varResult == trimToStringDouble(-2584.860315));
+		assert(res2.varName == "x2");
+		assert(res2.varResult == trimToStringDouble(2584.850315));
+	} catch (const ExpressionException& ex) {
+		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
+		assert(false);
+	}
+
+	try {
+		const auto tree = EBST("-10 * x^2 - -4 * x + 7 + x = 0");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("7.0 + 5.0 * x - 10.0 * x ^ 2.0 = 0") == 0);
+
+		const auto result = tree.solution().solutions;
+		assert(result.size() == 2);
+
+		auto res1 = result[0];
+		auto res2 = result[1];
+		assert(res1.varName == "x1");
+		assert(res1.varResult == trimToStringDouble(1.123212));
+		assert(res2.varName == "x2");
+		assert(res2.varResult == trimToStringDouble(-0.623212));
+	} catch (const ExpressionException& ex) {
+		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
+		assert(false);
+	}
+
+	try {
+		const auto tree = EBST("(x ^ 2) * 11 - (x ^ 2) * 2 = 0");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("9.0 * x ^ 2.0 = 0") == 0);
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 1);
@@ -146,8 +169,9 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("5 * x ^ 0 + 4 * x^1 - 9.3 * x ^ 2 - 1 * x^0");
-		assert(tree.toString(EBST::OutputType::ReducedInfix).compare("4.0 + 4.0 * x - 9.30 * x ^ 2.0") == 0);
+		const auto tree = EBST("5 * x ^ 0 + 4 * x^1 - 9.3 * x ^ 2 - 1 * x^0 = 0");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("4.0 + 4.0 * x - 9.30 * x ^ 2.0 = 0") == 0);
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 2);
@@ -164,8 +188,9 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("x * 4 - x ^ 2 * 4");
-		assert(tree.toString(EBST::OutputType::ReducedInfix).compare("4.0 * x - 4.0 * x ^ 2.0") == 0);
+		const auto tree = EBST("x * 4 - x ^ 2 * 4 = 0");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("4.0 * x - 4.0 * x ^ 2.0 = 0") == 0);
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 2);
@@ -182,8 +207,9 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("5 * x^0 + 4 * x^1 - 4 * x^0");
-		assert(tree.toString(EBST::OutputType::ReducedInfix).compare("1.0 + 4.0 * x") == 0);
+		const auto tree = EBST("5 * x^0 + 4 * x^1 - 4 * x^0 = 0");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("1.0 + 4.0 * x = 0") == 0);
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 1);
@@ -196,8 +222,9 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("5 + 4 * x + x^2- x^2");
-		assert(tree.toString(EBST::OutputType::ReducedInfix).compare("5.0 + 4.0 * x") == 0);
+		const auto tree = EBST("5 + 4 * x + x^2- x^2 = 0");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("5.0 + 4.0 * x = 0") == 0);
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 1);
@@ -211,8 +238,9 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("5 * x^0 - 5 * x^0");
-		assert(tree.toString(EBST::OutputType::ReducedInfix).compare("0.0") == 0);
+		const auto tree = EBST("5 * x^0 - 5 * x^0 = 0");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("0.0 = 0") == 0);
 		assert(tree.solution().solutions.size() == 0);
 	} catch (const ExpressionException& ex) {
 		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
@@ -220,8 +248,9 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("5 * x^0 - 4 * x^0 - 7 * x^1");
-		assert(tree.toString(EBST::OutputType::ReducedInfix).compare("1.0 - 7.0 * x") == 0);
+		const auto tree = EBST("5 * x^0 - 4 * x^0 - 7 * x^1 = 0");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("1.0 - 7.0 * x = 0") == 0);
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 1);
@@ -235,8 +264,9 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("5 * x^0 + 13 * x^1 + 3 * x^2 - 1* x^0 - 1 * x^1");
-		assert(tree.toString(EBST::OutputType::ReducedInfix).compare("4.0 + 12.0 * x + 3.0 * x ^ 2.0") == 0);
+		const auto tree = EBST("5 * x^0 + 13 * x^1 + 3 * x^2 - 1* x^0 - 1 * x^1 = 0");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("4.0 + 12.0 * x + 3.0 * x ^ 2.0 = 0") == 0);
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 2);
@@ -253,8 +283,9 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("6 * x^0 + 11 * x^1 + 5 * x^2 - 1 * x^0 - 1 * x^1");
-		assert(tree.toString(EBST::OutputType::ReducedInfix).compare("5.0 + 10.0 * x + 5.0 * x ^ 2.0") == 0);
+		const auto tree = EBST("6 * x^0 + 11 * x^1 + 5 * x^2 - 1 * x^0 - 1 * x^1 = 0");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("5.0 + 10.0 * x + 5.0 * x ^ 2.0 = 0") == 0);
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 1);
@@ -268,8 +299,9 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("5 * x^0 + 3 * x^1 + 3 * x^2 - 1 * x^0 + 0 * x^1");
-		assert(tree.toString(EBST::OutputType::ReducedInfix).compare("4.0 + 3.0 * x + 3.0 * x ^ 2.0") == 0);
+		const auto tree = EBST("5 * x^0 + 3 * x^1 + 3 * x^2 - 1 * x^0 + 0 * x^1 = 0");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("4.0 + 3.0 * x + 3.0 * x ^ 2.0 = 0") == 0);
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 2);
@@ -286,8 +318,9 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("8 * x^0 - 6 * x^1 + 0 * x^2 - 5.6 * x^3 - 3 * x^0");
-		assert(tree.toString(EBST::OutputType::ReducedInfix).compare("5.0 - 6.0 * x - 5.60 * x ^ 3.0") == 0);
+		const auto tree = EBST("8 * x^0 - 6 * x^1 + 0 * x^2 - 5.6 * x^3 - 3 * x^0 = 0");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("5.0 - 6.0 * x - 5.60 * x ^ 3.0 = 0") == 0);
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 3);
@@ -307,8 +340,9 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("4 * x ^ 3 - 10 * x ^ 2 + 9.46 * x - 90.5");
-		assert(tree.toString(EBST::OutputType::ReducedInfix).compare("-90.50 + 9.460 * x - 10.0 * x ^ 2.0 + 4.0 * x ^ 3.0") == 0);
+		const auto tree = EBST("4 * x ^ 3 - 10 * x ^ 2 + 9.46 * x - 90.5 = 0");
+		const auto treeToString = tree.toString(EBST::OutputType::ReducedInfix);
+		assert(treeToString.compare("-90.50 + 9.460 * x - 10.0 * x ^ 2.0 + 4.0 * x ^ 3.0 = 0") == 0);
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 3);
@@ -328,6 +362,16 @@ void ebstTest() {
 	}
 
 	// invalid scenarios
+	try {
+		const auto tree = EBST("x^2 + 5 * x");
+		assert(false && "did not caught no equal sign");
+	} catch (const ExpressionException&) {}
+
+	try {
+		const auto tree = EBST("x^2 = 4 * x = 3 - x");
+		assert(false && "did not caught multiple equal signs");
+	} catch (const ExpressionException&) {}
+
 	try {
 		const auto tree = EBST("x^2 - 4 * y + 5 * x");
 		assert(false && "did not caught multiple unknowns");

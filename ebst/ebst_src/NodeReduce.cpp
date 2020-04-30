@@ -5,6 +5,10 @@ EBST::NodePtr EBST::buildReducedFormTree(const NodePtr& node) {
 }
 
 EBST::NodePtr EBST::reduceNode(const NodePtr &parent) const {
+	if (!parent) {
+		return {};
+	}
+
 	auto newNode = allocateNode(parent->m_keyValue.first);
 
 	auto left = parent->m_left;

@@ -3,20 +3,22 @@
 #include <string>
 
 enum class ExpressionError {
-	DivisionByZero,
-	MissingOperator,
-	MissingLeftParentheses,
-	MissingRightParentheses,
-	LeftBracketError,
-	OperatorAfterOperator,
-	InvalidToken,
-	UnknownOperandSize,
 	CannotBalance,
-	TooComplexDivision,
-	TooComplexDegree,
+	DegreeHigherThanThree,
+	DivisionByZero,
+	InvalidToken,
+	LeftBracketError,
+	MissingLeftParentheses,
+	MissingOperator,
+	MissingRightParentheses,
 	MultipleUnknownOperands,
-	Unsolvable,
-	DegreeHigherThanThree
+	NoEqualSign,
+	OperatorAfterOperator,
+	TooComplexDegree,
+	TooComplexDivision,
+	TooManyEqualSigns,
+	UnknownOperandSize,
+	Unsolvable
 };
 
 class ExpressionException : public std::logic_error {
