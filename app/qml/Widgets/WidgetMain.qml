@@ -26,4 +26,36 @@ Rectangle {
         cursorShape: Qt.ArrowCursor
         onClicked: forceActiveFocus()
     }
+
+    ColumnLayout {
+        anchors {
+            top: parent.top
+            bottom: parent.bottom
+            left: parent.left
+            margins: SizeProvider.metric(5)
+        }
+
+        width: SizeProvider.metric(400)
+        spacing: SizeProvider.metric(10)
+
+        WidgetComputorHistoryArea {
+            id: historyArea
+
+            Layout.fillHeight: true
+            Layout.fillWidth: true
+        }
+
+        CTextField {
+            id: inputField
+
+            Layout.fillWidth: true
+
+            onEditingFinished: {
+                if (text !== "") {
+                    InputModel.readInput(text)
+                    text = ""
+                }
+            }
+        }
+    }
 }

@@ -3,7 +3,7 @@ import QtQuick.Window 2.12
 import QtQuick.Controls 2.12
 
 import SizeProvider 1.0
-import AppQmlPlugin 1.0
+import ComputorQmlPlugin 1.0
 import Theme 1.0
 
 import "../Controls"

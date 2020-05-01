@@ -16,6 +16,7 @@ GenericColorPalette::GenericColorPalette(QObject* parent)
     , m_black10Percent(setAlpha(m_black, 0.1))
     , m_black20Percent(setAlpha(m_black, 0.1))
     , m_black50Percent(setAlpha(m_black, 0.1))
+    , m_error(setAlpha(Qt::red, 0.8))
     , m_textSelection(setAlpha("#ffffff", 0.3))
     , m_transparent(Qt::transparent)
     , m_white("#ffffff")
@@ -47,6 +48,10 @@ QColor GenericColorPalette::black50Percent() const {
 
 QColor GenericColorPalette::black() const {
 	return m_black;
+}
+
+QColor GenericColorPalette::error() const {
+	return m_error;
 }
 
 QColor GenericColorPalette::highlight() const {

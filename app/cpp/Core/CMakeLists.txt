@@ -1,4 +1,5 @@
 set(source
+	ComputorCreateController.cpp
 	Logger.cpp
 	UIController.cpp
 	UIManager.cpp
@@ -6,6 +7,7 @@ set(source
 )
 
 set(headers
+	ComputorCreateController.h
 	Logger.h
 	UIController.h
 	UIManager.h

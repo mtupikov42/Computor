@@ -16,6 +16,7 @@
 #include "Core/Logger.h"
 #include "Utils/MetadataInitializer.h"
 #include "qmlplugins/AssetsProvider.h"
+#include "Models/ExpressionModel.h"
 
 namespace L {
 Q_LOGGING_CATEGORY(init, "app.main.init", QtInfoMsg);
@@ -76,16 +77,6 @@ int main(int argc, char** argv) {
 
 	Logger logger;
 	MetadataInitializer::registerAllMeta();
-
-	try {
-		EBST ebst("x^2 + 10 * x - 50.3");
-		const auto sols = ebst.solution().solutions;
-		for (const auto& s : sols) {
-			qCInfo(L::init) << QString::fromStdString(s.varName) << QString::fromStdString(s.varResult);
-		}
-	} catch (ExpressionException& ex) {
-		qCCritical(L::init) << QString::fromStdString(ex.toString()) << ex.column();
-	}
 
 	setupGraphics();
 	setupSettings();

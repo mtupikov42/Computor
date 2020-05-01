@@ -9,6 +9,7 @@
 		<file>Controls/CDelayButton.qml</file>
 		<file>Controls/CDial.qml</file>
 		<file>Controls/CDrawer.qml</file>
+		<file>Controls/CErrorText.qml</file>
 		<file>Controls/CGroupBox.qml</file>
 		<file>Controls/CIconButton.qml</file>
 		<file>Controls/CIconText.qml</file>
@@ -38,9 +39,12 @@
 		<file>Controls/CToolTipBackground.qml</file>
 		<file>Controls/CWindowHeaderButton.qml</file>
 		<file>Controls/WindowHeader.qml</file>
+		<file>Items/ExpressionDelegate.qml</file>
+		<file>Items/ExpressionsListView.qml</file>
+		<file>Widgets/CustomWindowAreaWidget.qml</file>
+		<file>Widgets/WidgetComputorHistoryArea.qml</file>
+		<file>Widgets/WidgetMain.qml</file>
 		<file>main.qml</file>
 		<file>Utils.js</file>
-		<file>Widgets/CustomWindowAreaWidget.qml</file>
-		<file>Widgets/WidgetMain.qml</file>
 	</qresource>
 </RCC>

@@ -10,6 +10,7 @@ class GenericColorPalette : public QObject {
 	Q_PROPERTY(QColor black20Percent READ black20Percent CONSTANT)
 	Q_PROPERTY(QColor black50Percent READ black50Percent CONSTANT)
 	Q_PROPERTY(QColor black READ black CONSTANT)
+	Q_PROPERTY(QColor error READ error CONSTANT)
 	Q_PROPERTY(QColor highlight READ highlight CONSTANT)
 	Q_PROPERTY(QColor line READ line CONSTANT)
 	Q_PROPERTY(QColor textSelection READ textSelection CONSTANT)
@@ -29,6 +30,7 @@ public:
 	QColor black20Percent() const;
 	QColor black50Percent() const;
 	QColor black() const;
+	QColor error() const;
 	QColor highlight() const;
 	QColor line() const;
 	QColor textSelection() const;
@@ -46,6 +48,7 @@ private:
 	const QColor m_black10Percent;
 	const QColor m_black20Percent;
 	const QColor m_black50Percent;
+	const QColor m_error;
 	const QColor m_textSelection;
 	const QColor m_transparent;
 	const QColor m_white;

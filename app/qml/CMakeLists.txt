@@ -8,6 +8,7 @@ set(qml
 	Controls/CDelayButton.qml
 	Controls/CDial.qml
 	Controls/CDrawer.qml
+	Controls/CErrorText.qml
 	Controls/CGroupBox.qml
 	Controls/CIconButton.qml
 	Controls/CIconText.qml
@@ -38,7 +39,11 @@ set(qml
 	Controls/CWindowHeaderButton.qml
 	Controls/WindowHeader.qml
 
+	Items/ExpressionDelegate.qml
+	Items/ExpressionsListView.qml
+
 	Widgets/CustomWindowAreaWidget.qml
+	Widgets/WidgetComputorHistoryArea.qml
 	Widgets/WidgetMain.qml
 
 	main.qml

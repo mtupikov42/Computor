@@ -17,6 +17,7 @@ set(application_resources
 set(application_subdirectories
 	cpp/Core
 	cpp/Mediators
+	cpp/Models
 	cpp/Utils
 	qml
 )
