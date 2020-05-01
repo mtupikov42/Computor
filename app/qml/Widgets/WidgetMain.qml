@@ -50,11 +50,18 @@ Rectangle {
 
             Layout.fillWidth: true
 
+            function textIsWhitespaceOnly(text) {
+                return text.replace(/\s/g, '').length === 0
+            }
+
             onEditingFinished: {
-                if (text !== "") {
+                var textIsEmpty = text.length === 0
+
+                if (!textIsEmpty && !textIsWhitespaceOnly(text)) {
                     InputModel.readInput(text)
-                    text = ""
                 }
+
+                text = ""
             }
         }
     }
