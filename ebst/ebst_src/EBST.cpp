@@ -51,7 +51,7 @@ EBST::EBST(const std::string& expressionString) {
 	auto leftExp = parseExpression(exprVec[0]);
 	auto leftRoot = buildTree(leftExp);
 
-	auto rightExp = parseExpression(exprVec[1]);
+	auto rightExp = parseExpression(exprVec[1], exprVec[0].size() + 1);
 	auto rightRoot = buildTree(rightExp);
 
 	auto leftReducedTreeRootNode = buildReducedFormTree(leftRoot);
@@ -155,12 +155,24 @@ EBST::NodePtr EBST::buildTree(const std::vector<ExpressionNode>& expr) {
 	return root;
 }
 
-std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr) {
+std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr, int preExprLength) {
     std::vector<ExpressionNode> output;
     std::stack<ExpressionNode> stack;
 	std::set<char> unknownOperands;
 
-	const auto readToken = [&expr, &unknownOperands, &stack](auto& it, const std::optional<ExpressionNode>& lastExpr) -> std::optional<ExpressionNode> {
+	const auto getErrorColumn = [preExprLength](int currCol) {
+		return preExprLength + currCol;
+	};
+
+	const auto castedDistance = [](const auto& begin, const auto& end) {
+		return static_cast<int>(std::distance(begin, end));
+	};
+
+	const auto readToken = [&expr,
+	                        &unknownOperands,
+	                        &stack,
+	                        &castedDistance,
+	                        &getErrorColumn] (auto& it, const std::optional<ExpressionNode>& lastExpr) -> std::optional<ExpressionNode> {
         auto dotFound = false;
 
         if (std::isdigit(*it) || *it == '-' || *it == '+') {
@@ -205,19 +217,19 @@ std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr) {
             --it;
 
             if (strVal.length() > 1) {
-				throw ExpressionException(ExpressionError::UnknownOperandSize, static_cast<int>(std::distance(expr.cbegin(), it)));
+				throw ExpressionException(ExpressionError::UnknownOperandSize, getErrorColumn(castedDistance(expr.cbegin(), it)));
             }
 
 			const auto ch = static_cast<char>(std::tolower(strVal.front()));
 			unknownOperands.insert(ch);
 			if (unknownOperands.size() > 1) {
-				throw ExpressionException(ExpressionError::MultipleUnknownOperands, static_cast<int>(std::distance(expr.cbegin(), it)));
+				throw ExpressionException(ExpressionError::MultipleUnknownOperands, getErrorColumn(castedDistance(expr.cbegin(), it)));
 			}
 
 			return parseOperandNodeFromString({ ch });
         }
 
-		throw ExpressionException(ExpressionError::InvalidToken, static_cast<int>(std::distance(expr.cbegin(), it)));
+		throw ExpressionException(ExpressionError::InvalidToken, getErrorColumn(castedDistance(expr.cbegin(), it)));
         return std::nullopt;
     };
 
@@ -229,10 +241,6 @@ std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr) {
 	const auto expressionNodeIsOperator = [](const std::optional<ExpressionNode>& op) {
 		return (op.has_value() && op.value().type() == ExpressionType::Operator) || !op.has_value();
     };
-
-	const auto distanceFromBegin = [&expr](const auto& it) {
-		return static_cast<int>(std::distance(expr.cbegin(), it));
-	};
 
     std::optional<ExpressionNode> lastExpressionNode;
     for (auto it = expr.cbegin(); it < expr.cend(); ++it) {
@@ -251,7 +259,7 @@ std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr) {
 		    && !nextTokenIsNumberAndPrevIsOperator) {
 
 			if (expressionNodeIsOperator(lastExpressionNode) && !isBracket(lastExpressionNode.value())) {
-				throw ExpressionException(ExpressionError::OperatorAfterOperator, distanceFromBegin(it));
+				throw ExpressionException(ExpressionError::OperatorAfterOperator, getErrorColumn(castedDistance(expr.cbegin(), it)));
 			}
 
 			auto op = pOp.value();
@@ -276,7 +284,7 @@ std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr) {
             if (pOp.has_value()) {
                 stack.push(pOp.value());
             } else {
-				throw ExpressionException(ExpressionError::LeftBracketError, distanceFromBegin(it));
+				throw ExpressionException(ExpressionError::LeftBracketError, getErrorColumn(castedDistance(expr.cbegin(), it)));
             }
         } else if (c == ')') {
             auto top = stack.top();
@@ -284,7 +292,7 @@ std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr) {
                 output.push_back(top);
                 stack.pop();
                 if (stack.empty()) {
-					throw ExpressionException(ExpressionError::MissingLeftParentheses, distanceFromBegin(it));
+					throw ExpressionException(ExpressionError::MissingLeftParentheses, getErrorColumn(castedDistance(expr.cbegin(), it)));
                 }
                 top = stack.top();
             }
@@ -294,14 +302,14 @@ std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr) {
             }
         } else {
             if (lastExpressionNode.has_value() && lastExpressionNode.value().type() == ExpressionType::Operand) {
-				throw ExpressionException(ExpressionError::MissingOperator, distanceFromBegin(it));
+				throw ExpressionException(ExpressionError::MissingOperator, getErrorColumn(castedDistance(expr.cbegin(), it)));
             }
 
 			pOp = readToken(it, lastExpressionNode);
             if (pOp.has_value()) {
                 output.push_back(pOp.value());
             } else {
-				throw ExpressionException(ExpressionError::InvalidToken, distanceFromBegin(it));
+				throw ExpressionException(ExpressionError::InvalidToken, getErrorColumn(castedDistance(expr.cbegin(), it)));
             }
         }
 
@@ -311,7 +319,7 @@ std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr) {
     while (!stack.empty()) {
         auto rToken = stack.top();
         if (isBracket(rToken)) {
-			throw ExpressionException(ExpressionError::MissingRightParentheses, distanceFromBegin(expr.cend()));
+			throw ExpressionException(ExpressionError::MissingRightParentheses, getErrorColumn(castedDistance(expr.cbegin(), expr.cend())));
         }
         output.push_back(rToken);
         stack.pop();

@@ -89,7 +89,7 @@ private:
 	friend NodeRule operator|(NodeRule a, NodeRule b);
 	std::string toString(const NodeRule rule) const;
 
-	std::vector<ExpressionNode> parseExpression(const std::string& expressionString);
+	std::vector<ExpressionNode> parseExpression(const std::string& expressionString, int preExprLength = 0);
 
 	NodePtr buildTree(const std::vector<ExpressionNode>& expressionString);
 
