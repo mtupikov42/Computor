@@ -84,6 +84,10 @@ void ebstTest() {
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 2);
 
+		const auto disc = tree.solution().discriminant;
+		assert(disc.has_value());
+		assert(disc.value() == 10000);
+
 		auto res1 = result[0];
 		auto res2 = result[1];
 		assert(res1.varName == "x1");
@@ -102,6 +106,10 @@ void ebstTest() {
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 2);
+
+		const auto disc = tree.solution().discriminant;
+		assert(disc.has_value());
+		assert(disc.value() == -4);
 
 		auto res1 = result[0];
 		auto res2 = result[1];
@@ -122,6 +130,10 @@ void ebstTest() {
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 2);
 
+		const auto disc = tree.solution().discriminant;
+		assert(disc.has_value());
+		assert(disc.value() == 26725908.0001);
+
 		auto res1 = result[0];
 		auto res2 = result[1];
 		assert(res1.varName == "x1");
@@ -140,6 +152,10 @@ void ebstTest() {
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 2);
+
+		const auto disc = tree.solution().discriminant;
+		assert(disc.has_value());
+		assert(disc.value() == 305);
 
 		auto res1 = result[0];
 		auto res2 = result[1];
@@ -170,6 +186,10 @@ void ebstTest() {
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 1);
 
+		const auto disc = tree.solution().discriminant;
+		assert(disc.has_value());
+		assert(disc.value() == 0);
+
 		auto res = result[0];
 		assert(res.varName == "x");
 		assert(res.varResult == trimToStringDouble(0.0));
@@ -185,6 +205,10 @@ void ebstTest() {
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 2);
+
+		const auto disc = tree.solution().discriminant;
+		assert(disc.has_value());
+		assert(disc.value() == 231.29000000000002);
 
 		auto res1 = result[0];
 		auto res2 = result[1];
@@ -205,6 +229,10 @@ void ebstTest() {
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 2);
 
+		const auto disc = tree.solution().discriminant;
+		assert(disc.has_value());
+		assert(disc.value() == 164.80);
+
 		auto res1 = result[0];
 		auto res2 = result[1];
 		assert(res1.varName == "x1");
@@ -224,6 +252,10 @@ void ebstTest() {
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 2);
 
+		const auto disc = tree.solution().discriminant;
+		assert(disc.has_value());
+		assert(disc.value() == 16);
+
 		auto res1 = result[0];
 		auto res2 = result[1];
 		assert(res1.varName == "x1");
@@ -242,6 +274,11 @@ void ebstTest() {
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 1);
+
+		const auto disc = tree.solution().discriminant;
+		assert(disc.has_value());
+		assert(disc.value() == 16);
+
 		auto res = result.front();
 		assert(res.varName == "x");
 		assert(res.varResult == trimToStringDouble(-0.25));
@@ -258,6 +295,10 @@ void ebstTest() {
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 1);
 
+		const auto disc = tree.solution().discriminant;
+		assert(disc.has_value());
+		assert(disc.value() == 16);
+
 		auto res = result.front();
 		assert(res.varName == "x");
 		assert(res.varResult == trimToStringDouble(-5.0 / 4.0));
@@ -273,6 +314,9 @@ void ebstTest() {
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 3);
+
+		const auto disc = tree.solution().discriminant;
+		assert(!disc.has_value());
 
 		auto res1 = result[0];
 		auto res2 = result[1];
@@ -307,6 +351,10 @@ void ebstTest() {
 		assert(result.size() == 1);
 		auto res = result.front();
 
+		const auto disc = tree.solution().discriminant;
+		assert(disc.has_value());
+		assert(disc.value() == 49);
+
 		assert(res.varName == "x");
 		assert(res.varResult == trimToStringDouble(1.0 / 7.0));
 	} catch (const ExpressionException& ex) {
@@ -321,6 +369,10 @@ void ebstTest() {
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 2);
+
+		const auto disc = tree.solution().discriminant;
+		assert(disc.has_value());
+		assert(disc.value() == 96);
 
 		auto res1 = result[0];
 		auto res2 = result[1];
@@ -341,6 +393,10 @@ void ebstTest() {
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 1);
 
+		const auto disc = tree.solution().discriminant;
+		assert(disc.has_value());
+		assert(disc.value() == 0);
+
 		auto res = result[0];
 		assert(res.varName == "x");
 		assert(res.varResult == trimToStringDouble(-1.0));
@@ -356,6 +412,10 @@ void ebstTest() {
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 2);
+
+		const auto disc = tree.solution().discriminant;
+		assert(disc.has_value());
+		assert(disc.value() == -39);
 
 		auto res1 = result[0];
 		auto res2 = result[1];
@@ -375,6 +435,9 @@ void ebstTest() {
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 3);
+
+		const auto disc = tree.solution().discriminant;
+		assert(!disc.has_value());
 
 		auto res1 = result[0];
 		auto res2 = result[1];
@@ -397,6 +460,9 @@ void ebstTest() {
 
 		const auto result = tree.solution().solutions;
 		assert(result.size() == 3);
+
+		const auto disc = tree.solution().discriminant;
+		assert(!disc.has_value());
 
 		auto res1 = result[0];
 		auto res2 = result[1];

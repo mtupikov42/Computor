@@ -18,6 +18,10 @@ std::string complexToString(const std::complex<double>& c) {
 	return realStr + optPlus + imagStr + "i";
 }
 
+double discriminant(double a, double b, double c) {
+	return std::pow(b, 2) - 4.0 * a * c;
+}
+
 const auto pi = std::acos(-1);
 
 } // end anonymous namepsace
@@ -62,10 +66,13 @@ void EBST::solveLinear() {
 		return -1.0 * b / a;
 	};
 
-	const auto a = getNthDegreeUnknownValue(1);
-	const auto b = getNthDegreeUnknownValue(0, true);
+	const auto b = getNthDegreeUnknownValue(1);
+	const auto c = getNthDegreeUnknownValue(0, true);
 
-	m_solution.solutions.push_back({ {m_unknownOperandName}, trimToStringDouble(solve(a, b)) });
+	const auto d = discriminant(0.0, b ,c);
+
+	m_solution.discriminant.emplace(d);
+	m_solution.solutions.push_back({ {m_unknownOperandName}, trimToStringDouble(solve(b, c)) });
 }
 
 void EBST::solveQuadratic() {
@@ -112,15 +119,11 @@ void EBST::solveQuadratic() {
 		return { res1, res2 };
 	};
 
-	const auto discriminant = [](double a, double b, double c) {
-		return std::pow(b, 2) - 4.0 * a * c;
-	};
-
 	const auto a = getNthDegreeUnknownValue(2);
 	const auto b = getNthDegreeUnknownValue(1);
 	const auto c = getNthDegreeUnknownValue(0, true);
 
-	const auto d = discriminant(a, b ,c);
+	const auto d = discriminant(a, b, c);
 
 	m_solution.discriminant.emplace(d);
 	std::vector<ExpressionResult> solutions;
