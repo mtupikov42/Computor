@@ -28,25 +28,23 @@ Item {
             width: sourceTextMetrics.advanceWidth
             height: SizeProvider.metric(5)
 
-            readonly property int symWidth: oneSymbolTextMetrics.advanceWidth
-
             onPaint: {
                 var ctx = getContext("2d")
                 ctx.strokeStyle = QmlColorPalette.generic.error
                 ctx.lineWidth = SizeProvider.metric(1)
 
                 var depth = root.errorColumn !== 0 ? errorLineCanvas.height - 1 : 0
-                var symbolWidth = symWidth * 1.5
                 var cursorWidth = SizeProvider.metric(6)
+                var substringWidth = substringTextMetrics.advanceWidth
 
                 ctx.beginPath()
                 ctx.moveTo(0, depth)
-                ctx.lineTo(root.errorColumn * symbolWidth, depth)
-                ctx.moveTo(root.errorColumn * symbolWidth, depth)
-                ctx.lineTo(root.errorColumn * symbolWidth + cursorWidth / 2, 0)
-                ctx.moveTo(root.errorColumn * symbolWidth + cursorWidth / 2, 0)
-                ctx.lineTo(root.errorColumn * symbolWidth + cursorWidth, depth)
-                ctx.moveTo(root.errorColumn * symbolWidth + cursorWidth, depth)
+                ctx.lineTo(substringWidth, depth)
+                ctx.moveTo(substringWidth, depth)
+                ctx.lineTo(substringWidth + cursorWidth / 2, 0)
+                ctx.moveTo(substringWidth + cursorWidth / 2, 0)
+                ctx.lineTo(substringWidth + cursorWidth, depth)
+                ctx.moveTo(substringWidth + cursorWidth, depth)
                 ctx.lineTo(errorLineCanvas.width, depth)
                 ctx.stroke()
             }
@@ -67,9 +65,9 @@ Item {
     }
 
     TextMetrics {
-        id: oneSymbolTextMetrics
+        id: substringTextMetrics
 
-        text: " "
+        text: sourceText.text.substring(0, root.errorColumn)
         font: sourceText.font
     }
 }
