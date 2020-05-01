@@ -330,6 +330,10 @@ std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr, int p
 		m_unknownOperandName = static_cast<char>(*unknownOperands.cbegin());
 	}
 
+	if (output.empty()) {
+		throw ExpressionException(ExpressionError::InvalidToken, getErrorColumn(0));
+	}
+
 	return output;
 }
 
