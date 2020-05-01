@@ -490,77 +490,77 @@ void ebstTest() {
 	} catch (const ExpressionException&) {}
 
 	try {
-		const auto tree = EBST("x^2 - 4 * y + 5 * x");
+		const auto tree = EBST("x^2 - 4 * y + 5 * x = 0");
 		assert(false && "did not caught multiple unknowns");
 	} catch (const ExpressionException&) {}
 
     try {
-        const auto tree = EBST("x^2 - 4x + 7 + x");
+		const auto tree = EBST("x^2 - 4x + 7 + x = 0");
         assert(false && "did not caught missing operator");
 	} catch (const ExpressionException&) {}
 
     try {
-        const auto tree = EBST("xd^2 - 4 * x + 7 + x");
+		const auto tree = EBST("xd^2 - 4 * x + 7 + x = 0");
         assert(false && "did not caught multiple char variable");
 	} catch (const ExpressionException&) {}
 
     try {
-        const auto tree = EBST("(x + 10");
+		const auto tree = EBST("(x + 10 = 0");
         assert(false && "did not caught missing ')' bracket");
 	} catch (const ExpressionException&) {}
 
     try {
-        const auto tree = EBST("x + 10)");
+		const auto tree = EBST("x + 10) = 0");
         assert(false && "did not caught missing '(' bracket");
 	} catch (const ExpressionException&) {}
 
     try {
-        const auto tree = EBST("10 ? 2");
+		const auto tree = EBST("10 ? 2 = 0");
         assert(false && "did not caught invalid operator");
 	} catch (const ExpressionException&) {}
 
     try {
-        const auto tree = EBST("10.312.312.312 + 543.534543.543");
+		const auto tree = EBST("10.312.312.312 + 543.534543.543 = 0");
         assert(false && "did not caught invalid operand");
 	} catch (const ExpressionException&) {}
 
 	try {
-		const auto tree = EBST("10 / (x - 2) + 10 * x ^ 2");
+		const auto tree = EBST("10 / (x - 2) + 10 * x ^ 2 = 0");
 		assert(false && "did not caught too complex division");
 	} catch (const ExpressionException&) {}
 
 	try {
-		const auto tree = EBST("3 ^ (x - 20) + 20 * x");
+		const auto tree = EBST("3 ^ (x - 20) + 20 * x = 0");
 		assert(false && "did not caught too complex degree");
 	} catch (const ExpressionException&) {}
 
 	try {
-		const auto tree = EBST("x / (x - 2) + 10 * x ^ 2");
+		const auto tree = EBST("x / (x - 2) + 10 * x ^ 2 = 0");
 		assert(false && "did not caught too complex division");
 	} catch (const ExpressionException&) {}
 
 	try {
-		const auto tree = EBST("x ^ (x - 20) + 20 * x");
+		const auto tree = EBST("x ^ (x - 20) + 20 * x = 0");
 		assert(false && "did not caught too complex degree");
 	} catch (const ExpressionException&) {}
 
 	try {
-		const auto tree = EBST("(x / 100) / (x - 2) + 10 * x ^ 2");
+		const auto tree = EBST("(x / 100) / (x - 2) + 10 * x ^ 2 = 0");
 		assert(false && "did not caught too complex division");
 	} catch (const ExpressionException&) {}
 
 	try {
-		const auto tree = EBST("(x / 100) ^ (x - 20) + 20 * x");
+		const auto tree = EBST("(x / 100) ^ (x - 20) + 20 * x = 0");
 		assert(false && "did not caught too complex degree");
 	} catch (const ExpressionException&) {}
 
 	try {
-		const auto tree = EBST("4 * x^0 - 8 * x^0");
+		const auto tree = EBST("4 * x^0 - 8 * x^0 = 0");
 		assert(false && "did not caught unsolving expresion");
 	} catch (const ExpressionException&) {}
 
 	try {
-		const auto tree = EBST("8 * x^0 - 6 * x^1 + 0 * x^2 - 5.6 * x^4 - 3 * x^3");
+		const auto tree = EBST("8 * x^0 - 6 * x^1 + 0 * x^2 - 5.6 * x^4 - 3 * x^3 = 0");
 		assert(false && "uncought degree higher than three");
 	} catch (const ExpressionException&) {}
 

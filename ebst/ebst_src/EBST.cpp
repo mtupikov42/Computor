@@ -301,16 +301,16 @@ std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr, int p
                 stack.pop();
             }
         } else {
-            if (lastExpressionNode.has_value() && lastExpressionNode.value().type() == ExpressionType::Operand) {
-				throw ExpressionException(ExpressionError::MissingOperator, getErrorColumn(castedDistance(expr.cbegin(), it)));
-            }
-
 			pOp = readToken(it, lastExpressionNode);
             if (pOp.has_value()) {
                 output.push_back(pOp.value());
             } else {
 				throw ExpressionException(ExpressionError::InvalidToken, getErrorColumn(castedDistance(expr.cbegin(), it)));
             }
+
+			if (lastExpressionNode.has_value() && lastExpressionNode.value().type() == ExpressionType::Operand) {
+				throw ExpressionException(ExpressionError::MissingOperator, getErrorColumn(castedDistance(expr.cbegin(), it)));
+			}
         }
 
         lastExpressionNode = pOp;

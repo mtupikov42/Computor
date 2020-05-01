@@ -60,7 +60,7 @@ void EBST::solveNumber() {
 }
 
 void EBST::solveLinear() {
-	assert(m_degreeSubtrees.size() == 2);
+	assert(m_degreeSubtrees.size() >= 1);
 
 	const auto solve = [](double a, double b) {
 		return -1.0 * b / a;

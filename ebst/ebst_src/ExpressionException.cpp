@@ -15,7 +15,7 @@ std::string ExpressionException::toString() const {
 		{ ExpressionError::NoEqualSign, "No equal sign in expression" },
 		{ ExpressionError::TooManyEqualSigns, "Too many equal signs in expression" },
 		{ ExpressionError::DivisionByZero, "Division by zero" },
-		{ ExpressionError::MissingOperator, "Missiong operator between operands" },
+		{ ExpressionError::MissingOperator, "Missing operator between operands" },
 		{ ExpressionError::MissingLeftParentheses, "Missing `(` parentheses" },
 		{ ExpressionError::MissingRightParentheses, "Missing `)` parentheses" },
 		{ ExpressionError::LeftBracketError, "Left bracket is invalid" },
