@@ -480,6 +480,11 @@ void ebstTest() {
 
 	// invalid scenarios
 	try {
+		const auto tree = EBST("x = ");
+		assert(false && "did not caught empty expression");
+	} catch (const ExpressionException&) {}
+
+	try {
 		const auto tree = EBST("x^2 + 5 * x");
 		assert(false && "did not caught no equal sign");
 	} catch (const ExpressionException&) {}
