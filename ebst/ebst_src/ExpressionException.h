@@ -12,9 +12,11 @@ enum class ExpressionError {
 	MissingOperator,
 	MissingRightParentheses,
 	MultipleUnknownOperands,
+	NoEqualSign,
 	OperatorAfterOperator,
 	TooComplexDegree,
 	TooComplexDivision,
+	TooManyEqualSigns,
 	UnknownOperandSize,
 	Unsolvable
 };

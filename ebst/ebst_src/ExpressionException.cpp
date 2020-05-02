@@ -12,6 +12,8 @@ ExpressionException::ExpressionException(ExpressionError err, int column)
 
 std::string ExpressionException::toString() const {
 	const std::map<ExpressionError, std::string> errorToStringMap {
+		{ ExpressionError::NoEqualSign, "No equal sign in expression" },
+		{ ExpressionError::TooManyEqualSigns, "Too many equal signs in expression" },
 		{ ExpressionError::DivisionByZero, "Division by zero" },
 		{ ExpressionError::MissingOperator, "Missing operator between operands" },
 		{ ExpressionError::MissingLeftParentheses, "Missing `(` parentheses" },
