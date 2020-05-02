@@ -7,7 +7,9 @@ namespace L {
 Q_LOGGING_CATEGORY(input_model, "app.input_model", QtInfoMsg);
 } // end namespace L
 
-InputModel::InputModel(QObject* parent) : QObject(parent) {}
+InputModel::InputModel(QObject* parent)
+    : QObject(parent)
+{}
 
 void InputModel::readInput(const QString& input) {
 	deductInput(input);
@@ -18,9 +20,9 @@ void InputModel::deductInput(const QString& input) {
 	const auto funcMatch = functionPattern.match(input);
 
 	if (funcMatch.hasMatch()) {
-		const auto funcName = funcMatch.captured(1);
-		const auto varNameStr = funcMatch.captured(2);
-		const auto expr = funcMatch.captured(3);
+		const auto funcName = funcMatch.captured(1).toLower();
+		const auto varNameStr = funcMatch.captured(2).toLower();
+		const auto expr = funcMatch.captured(3).toLower();
 
 		if (varNameStr.length() != 1) {
 			emit invalidFunctionUnknownVar();

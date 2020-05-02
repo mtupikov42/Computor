@@ -47,6 +47,14 @@ QHash<int, QByteArray> FunctionList::roleNames() const {
 }
 
 void FunctionList::add(const FunctionModel::Ptr& model) {
+	for (auto& f : m_funModels) {
+		if (f->functionName().toLower() == model->functionName().toLower()) {
+			f = model;
+			notifyRowDataChanged(m_funModels.indexOf(f), { Role::FunctionString, Role::ErrorColumn, Role::ErrorString });
+			return;
+		}
+	}
+
 	beginInsertRows({}, rowCount(), rowCount());
 	m_funModels.push_back(model);
 	endInsertRows();
