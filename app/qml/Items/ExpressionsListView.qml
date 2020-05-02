@@ -10,6 +10,8 @@ Item {
 
     property var model: null
 
+    signal expressionCopied(string expression)
+
     ListView {
         id: expressionsView
 
@@ -50,6 +52,8 @@ Item {
                 prefixString: prefixStringRole
                 reducedInfixString: reducedInfixStringRole
                 errorString: errorStringRole
+
+                onExpressionCopied: root.expressionCopied(expression)
 
                 CDecorationLine {
                     anchors {

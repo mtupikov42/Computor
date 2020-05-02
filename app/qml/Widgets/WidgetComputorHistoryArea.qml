@@ -12,6 +12,8 @@ import QmlColorPalette 1.0
 Item {
     id: root
 
+    signal contentCopied(string content)
+
     CTabBar {
         id: computorBar
 
@@ -52,6 +54,8 @@ Item {
                 id: expressionList
 
                 model: ExpressionList
+
+                onExpressionCopied: root.contentCopied(expression)
             }
         }
     }

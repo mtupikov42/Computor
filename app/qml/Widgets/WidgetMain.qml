@@ -35,7 +35,7 @@ Rectangle {
             margins: SizeProvider.metric(5)
         }
 
-        width: SizeProvider.metric(400)
+        width: SizeProvider.metric(500)
         spacing: SizeProvider.metric(10)
 
         WidgetComputorHistoryArea {
@@ -43,6 +43,8 @@ Rectangle {
 
             Layout.fillHeight: true
             Layout.fillWidth: true
+
+            onContentCopied: inputField.text = content
         }
 
         CTextField {
@@ -54,7 +56,7 @@ Rectangle {
                 return text.replace(/\s/g, '').length === 0
             }
 
-            onEditingFinished: {
+            onAccepted: {
                 var textIsEmpty = text.length === 0
 
                 if (!textIsEmpty && !textIsWhitespaceOnly(text)) {

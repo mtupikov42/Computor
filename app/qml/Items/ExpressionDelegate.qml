@@ -4,6 +4,7 @@ import QtQuick.Layouts 1.12
 import "../Controls"
 
 import SizeProvider 1.0
+import SpecialSymbols 1.0
 
 Item {
     id: root
@@ -23,10 +24,14 @@ Item {
 
     readonly property Loader currentLoader: errorState ? errorLoader : normalLoader
     readonly property bool errorState: errorColumn >= 0
+    readonly property real layoutMargin: SizeProvider.metric(10)
+
+    signal expressionCopied(string expression)
 
     Loader {
         id: errorLoader
 
+        width: root.width
         active: root.errorState
         sourceComponent: errorComponent
     }
@@ -34,6 +39,7 @@ Item {
     Loader {
         id: normalLoader
 
+        width: root.width
         active: !root.errorState
         sourceComponent: normalComponent
     }
@@ -47,9 +53,36 @@ Item {
             CErrorText {
                 id: errorText
 
+                Layout.leftMargin: root.layoutMargin
+
                 text: root.rawExpressionString
                 errorColumn: root.errorColumn
                 errorText: root.errorString
+            }
+
+            Item {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
+            }
+
+            ColumnLayout {
+                Layout.fillHeight: true
+                Layout.rightMargin: root.layoutMargin
+
+                implicitWidth: copyNormalIcon.width
+
+                CIconButton {
+                    id: copyNormalIcon
+
+                    text: SpecialSymbols.faClone
+                    tooltip.text: qsTr("Copy expression")
+
+                    onPressed: root.expressionCopied(errorText.text)
+                }
+
+                Item {
+                    Layout.fillHeight: true
+                }
             }
         }
     }
@@ -57,25 +90,58 @@ Item {
     Component {
         id: normalComponent
 
-        ColumnLayout {
-            spacing: SizeProvider.metric(3)
+        RowLayout {
+            ColumnLayout {
+                Layout.fillHeight: true
+                Layout.leftMargin: root.layoutMargin
 
-            CText {
-                id: expressionText
+                implicitWidth: Math.max(expressionText.width, degreeText.width, solRepeater.width)
+                spacing: SizeProvider.metric(3)
 
-                text: root.reducedInfixString
+                CText {
+                    id: expressionText
+
+                    text: root.reducedInfixString
+                }
+
+                CText {
+                    id: degreeText
+
+                    text: qsTr("Degree: ") + root.degree
+                }
+
+                Repeater {
+                    id: solRepeater
+
+                    model: root.solutions
+                    delegate: CText {
+                        text: modelData
+                    }
+                }
             }
 
-            CText {
-                id: degreeText
-
-                text: qsTr("Degree: ") + root.degree
+            Item {
+                Layout.fillHeight: true
+                Layout.fillWidth: true
             }
 
-            Repeater {
-                model: root.solutions
-                delegate: CText {
-                    text: modelData
+            ColumnLayout {
+                Layout.fillHeight: true
+                Layout.rightMargin: root.layoutMargin
+
+                implicitWidth: copyNormalIcon.width
+
+                CIconButton {
+                    id: copyNormalIcon
+
+                    text: SpecialSymbols.faClone
+                    tooltip.text: qsTr("Copy expression")
+
+                    onPressed: root.expressionCopied(expressionText.text)
+                }
+
+                Item {
+                    Layout.fillHeight: true
                 }
             }
         }
