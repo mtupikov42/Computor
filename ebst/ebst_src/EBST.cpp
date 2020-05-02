@@ -177,6 +177,10 @@ std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr, int p
     for (auto it = expr.cbegin(); it < expr.cend(); ++it) {
         const auto c = *it;
 
+		if (c < -1) {
+			throw ExpressionException(ExpressionError::InvalidToken, getErrorColumn(castedDistance(expr.cbegin(), it)));
+		}
+
         if (std::isspace(c)) {
             continue;
         }
