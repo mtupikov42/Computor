@@ -8,81 +8,9 @@
 #include <algorithm>
 #include <set>
 
-namespace {
-
-const auto equalSign = '=';
-const auto equalToZero = " = 0";
-
-std::vector<std::string> splitStringByEqualSign(const std::string& s) {
-	auto next = 0U;
-	auto last = 0U;
-	std::vector<std::string> vec;
-
-	while ((next = s.find(equalSign, last)) != std::string::npos) {
-		vec.push_back(s.substr(last, next - last));
-		last = next + 1;
-	}
-	vec.push_back(s.substr(last));
-
-	return vec;
-}
-
-} // end anonymous namespace
-
 EBST::EBST(const std::string& expressionString) {
-	auto i = 0;
-	for (const auto c : expressionString) {
-		if (c == equalSign) {
-			++i;
-		}
-	}
-
-	if (i == 0) {
-		throw ExpressionException(ExpressionError::NoEqualSign, 0);
-	}
-
-	if (i > 1) {
-		throw ExpressionException(ExpressionError::TooManyEqualSigns, 0);
-	}
-
-	const auto exprVec = splitStringByEqualSign(expressionString);
-	assert(exprVec.size() == 2);
-
-	auto leftExp = parseExpression(exprVec[0]);
-	auto leftRoot = buildTree(leftExp);
-
-	auto rightExp = parseExpression(exprVec[1], exprVec[0].size() + 1);
-	auto rightRoot = buildTree(rightExp);
-
-	auto leftReducedTreeRootNode = buildReducedFormTree(leftRoot);
-	SubtreesByDegree leftSubtrees;
-	auto leftBalancedTreeRootNode = buildBalancedTree(leftReducedTreeRootNode, leftSubtrees);
-
-	auto rightReducedTreeRootNode = buildReducedFormTree(rightRoot);
-	SubtreesByDegree rightSubtrees;
-	auto rightBalancedTreeRootNode = buildBalancedTree(rightReducedTreeRootNode, rightSubtrees);
-
-	// mirror +- for right side
-	for (auto& pair : rightSubtrees) {
-		for (auto& subtree : pair.second) {
-			mirrorNodeSign(subtree);
-		}
-	}
-
-	// merge two maps with vectors
-	auto first = rightSubtrees.begin();
-	auto last = rightSubtrees.end();
-	for (; first != last; ++first) {
-		auto ins = leftSubtrees.insert(*first);
-		if (!ins.second) {
-			auto& rhsVec = first->second;
-			auto& lhsVec = ins.first->second;
-			lhsVec.insert(lhsVec.end(), rhsVec.begin(), rhsVec.end());
-		}
-	}
-
-	const auto spreadedSubtrees = spreadSubtrees(leftSubtrees);
-	m_rootNode = buildTreeFromVectorOfNodes(spreadedSubtrees);
+	const auto exprVec = parseExpression(expressionString);
+	m_rootNode = buildTree(exprVec);
 	m_reducedTreeRootNode = buildReducedFormTree(m_rootNode);
 	m_balancedTreeRootNode = buildBalancedTree(m_reducedTreeRootNode, m_degreeSubtrees);
 
@@ -111,7 +39,7 @@ std::string EBST::toString(OutputType type) const {
 	case OutputType::Prefix: output = outputPrefix(m_balancedTreeRootNode); break;
 	}
 
-	return output + equalToZero;
+	return output;
 }
 
 int EBST::maxDegree() const {
