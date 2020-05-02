@@ -8,6 +8,9 @@ import QmlColorPalette 1.0
 Item {
     id: root
 
+    implicitHeight: rootColumn.height
+    implicitWidth: rootColumn.width
+
     property int errorColumn: 0
     property alias text: sourceText.text
     property alias errorText: errorText.text
@@ -15,7 +18,8 @@ Item {
     Component.onCompleted: errorLineCanvas.requestPaint()
 
     ColumnLayout {
-        anchors.fill: parent
+        id: rootColumn
+
         spacing: SizeProvider.metric(1)
 
         CText {

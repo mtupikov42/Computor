@@ -8,6 +8,8 @@ import SizeProvider 1.0
 Item {
     id: root
 
+    height: currentLoader.item.height
+
     property int degree
     property int errorColumn
     property var solutions
@@ -19,14 +21,29 @@ Item {
     property string reducedInfixString
     property string errorString
 
+    readonly property Loader currentLoader: errorState ? errorLoader : normalLoader
     readonly property bool errorState: errorColumn >= 0
 
     Loader {
         id: errorLoader
 
-        anchors.fill: parent
         active: root.errorState
-        sourceComponent: Component {
+        sourceComponent: errorComponent
+    }
+
+    Loader {
+        id: normalLoader
+
+        active: !root.errorState
+        sourceComponent: normalComponent
+    }
+
+    Component {
+        id: errorComponent
+
+        RowLayout {
+            spacing: SizeProvider.metric(5)
+
             CErrorText {
                 id: errorText
 
@@ -37,16 +54,29 @@ Item {
         }
     }
 
-    Loader {
-        id: normalLoader
+    Component {
+        id: normalComponent
 
-        anchors.fill: parent
-        active: !root.errorState
-        sourceComponent: Component {
+        ColumnLayout {
+            spacing: SizeProvider.metric(3)
+
             CText {
                 id: expressionText
 
                 text: root.reducedInfixString
+            }
+
+            CText {
+                id: degreeText
+
+                text: qsTr("Degree: ") + root.degree
+            }
+
+            Repeater {
+                model: root.solutions
+                delegate: CText {
+                    text: modelData
+                }
             }
         }
     }

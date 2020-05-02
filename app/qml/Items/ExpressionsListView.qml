@@ -35,11 +35,10 @@ Item {
         id: expressionItemDelegate
 
         Column {
-            spacing: SizeProvider.metric(1)
+            spacing: SizeProvider.metric(5)
 
             ExpressionDelegate {
                 width: expressionsView.width
-                height: errorState ? SizeProvider.metric(60) : SizeProvider.metric(30)
 
                 degree: degreeRole
                 errorColumn: errorColumnRole
