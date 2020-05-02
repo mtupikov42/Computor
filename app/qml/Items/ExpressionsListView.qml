@@ -25,6 +25,8 @@ Item {
             policy: (expressionsView.contentHeight > expressionsView.height) ? ScrollBar.AsNeeded : ScrollBar.AlwaysOff
         }
 
+        onCountChanged: currentIndex = count - 1
+
         Behavior on bottomMargin { NumberAnimation { duration: 400; easing.type: Easing.OutCubic } }
         Behavior on contentY { NumberAnimation { duration: 400; easing.type: Easing.OutCubic } }
     }
