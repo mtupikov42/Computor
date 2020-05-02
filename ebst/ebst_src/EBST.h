@@ -29,7 +29,7 @@ public:
 		Prefix
 	};
 
-	explicit EBST(const std::string& expressionString);
+	explicit EBST(const std::string& expressionString, bool containsEqualSign = true);
 
 	std::string toString(OutputType type = OutputType::Infix) const;
 	int maxDegree() const;
@@ -180,6 +180,7 @@ private:
 	ExpressionSolution m_solution;
 	int m_maxDegree = 0;
 	bool m_isBalanced = false;
+	bool m_containsEqualSign = false;
 	std::string m_unknownOperandName = {invalidOperandVarName};
 
 	// unused stuff
