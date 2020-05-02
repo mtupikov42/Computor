@@ -238,6 +238,11 @@ std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr, int p
         return next != expr.cend() && std::isdigit(*next);
     };
 
+	const auto nextTokenIsAlpha = [&expr](auto it) {
+		const auto next = std::next(it, 1);
+		return next != expr.cend() && std::isalpha(*next);
+	};
+
 	const auto expressionNodeIsOperator = [](const std::optional<ExpressionNode>& op) {
 		return (op.has_value() && op.value().type() == ExpressionType::Operator) || !op.has_value();
     };
@@ -257,6 +262,10 @@ std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr, int p
 
         if (pOp.has_value() && !isBracket(pOp.value())
 		    && !nextTokenIsNumberAndPrevIsOperator) {
+
+			if (!lastExpressionNode.has_value() && nextTokenIsAlpha(it)) {
+				throw ExpressionException(ExpressionError::InvalidToken, getErrorColumn(castedDistance(expr.cbegin(), it)));
+			}
 
 			if (expressionNodeIsOperator(lastExpressionNode) && !isBracket(lastExpressionNode.value())) {
 				throw ExpressionException(ExpressionError::OperatorAfterOperator, getErrorColumn(castedDistance(expr.cbegin(), it)));
