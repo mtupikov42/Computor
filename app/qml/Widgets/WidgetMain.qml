@@ -52,6 +52,10 @@ Rectangle {
 
             Layout.fillWidth: true
 
+            placeholderText: qsTr("Please enter function / variable / matrix..")
+            tooltip.visible: false
+            tooltip.color: QmlColorPalette.generic.error
+
             function textIsWhitespaceOnly(text) {
                 return text.replace(/\s/g, '').length === 0
             }
@@ -64,6 +68,23 @@ Rectangle {
                 }
 
                 text = ""
+            }
+        }
+
+        Connections {
+            target: InputModel
+
+            onInvalidFunctionUnknownVar: {
+                inputField.tooltip.text = qsTr("Function unknown variable name must consist of one character")
+                inputField.tooltip.visible = true
+            }
+
+            onExpressionInserted: {
+                historyArea.selectExpressions()
+            }
+
+            onFunctionInserted: {
+                historyArea.selectFunctions()
             }
         }
     }

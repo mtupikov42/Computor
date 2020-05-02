@@ -41,6 +41,9 @@ set(qml
 
 	Items/ExpressionDelegate.qml
 	Items/ExpressionsListView.qml
+	Items/FunctionDelegate.qml
+	Items/FunctionsListView.qml
+	Items/HistoryListView.qml
 
 	Widgets/CustomWindowAreaWidget.qml
 	Widgets/WidgetComputorHistoryArea.qml

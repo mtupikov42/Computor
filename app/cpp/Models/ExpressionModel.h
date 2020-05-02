@@ -23,7 +23,7 @@ public:
 	};
 	Q_ENUM(OutputType)
 
-	explicit ExpressionModel(const QString& rawExpression, QObject* parent = nullptr);
+	explicit ExpressionModel(const QString& rawExpression, bool inFunction, QObject* parent = nullptr);
 
 	QString toString(OutputType type) const;
 	int maxDegree() const;
@@ -34,7 +34,7 @@ public:
 
 private:
 	bool treeIsValid() const;
-	void parseRawExpression(const QString& rawExpression);
+	void parseRawExpression(const QString& rawExpression, bool inFunction);
 	const EBST& expressionTree() const;
 
 	std::optional<EBST> m_expressionTree;

@@ -8,35 +8,30 @@ import SizeProvider 1.0
 HistoryListView {
     id: root
 
-    delegate: expressionItemDelegate
+    delegate: functionItemDelegate
 
-    signal expressionCopied(string expression)
+    signal functionCopied(string func)
 
     Component {
-        id: expressionItemDelegate
+        id: functionItemDelegate
 
         Column {
             spacing: SizeProvider.metric(5)
 
-            ExpressionDelegate {
+            FunctionDelegate {
                 width: root.width
 
-                degree: degreeRole
+                functionString: functionStringRole
                 errorColumn: errorColumnRole
-                solutions: solutionsRole
-                rawExpressionString: rawExpressionStringRole
-                infixString: infixStringRole
-                infixWithParenthesesString: infixWithParenthesesStringRole
-                postfixString: postfixStringRole
-                prefixString: prefixStringRole
                 errorString: errorStringRole
 
-                onExpressionCopied: root.expressionCopied(expression)
+                onFunctionCopied: root.functionCopied(func)
                 onRequestRemove: root.model.remove(index)
 
                 CDecorationLine {
                     anchors {
                         top: parent.bottom
+                        topMargin: SizeProvider.metric(5)
                         horizontalCenter: parent.horizontalCenter
                     }
                     lineLength: parent.width - SizeProvider.metric(20)

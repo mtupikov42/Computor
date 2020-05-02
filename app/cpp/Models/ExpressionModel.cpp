@@ -14,8 +14,8 @@ void ExpressionModel::RegisterType(const char* uri) {
 	qmlRegisterUncreatableType<ExpressionModel>(uri, 1, 0, "ExpressionModel", "ExpressionModel must be created on C++ side");
 }
 
-ExpressionModel::ExpressionModel(const QString& rawExpression, QObject* parent) : QObject(parent) {
-	parseRawExpression(rawExpression);
+ExpressionModel::ExpressionModel(const QString& rawExpression, bool inFunction, QObject* parent) : QObject(parent) {
+	parseRawExpression(rawExpression, inFunction);
 }
 
 QString ExpressionModel::toString(OutputType type) const {
@@ -83,11 +83,11 @@ bool ExpressionModel::treeIsValid() const {
 	return m_expressionTree.has_value();
 }
 
-void ExpressionModel::parseRawExpression(const QString& rawExpression) {
+void ExpressionModel::parseRawExpression(const QString& rawExpression, bool inFunction) {
 	m_rawExpression = rawExpression;
 
 	try {
-		EBST ebst(m_rawExpression.toStdString());
+		EBST ebst(m_rawExpression.toStdString(), !inFunction);
 		m_expressionTree = std::move(ebst);
 		qCDebug(L::expression_model) << "Tree was parsed successfully";
 	} catch (const ExpressionException& ex) {

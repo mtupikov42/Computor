@@ -14,6 +14,14 @@ Item {
 
     signal contentCopied(string content)
 
+    function selectExpressions() {
+        computorBar.currentIndex = 0
+    }
+
+    function selectFunctions() {
+        computorBar.currentIndex = 1
+    }
+
     CTabBar {
         id: computorBar
 
@@ -25,7 +33,11 @@ Item {
         width: parent.width
 
         CTabButton {
-            text: "Expressions"
+            text: qsTr("Expressions")
+        }
+
+        CTabButton {
+            text: qsTr("Functions")
         }
     }
 
@@ -56,6 +68,14 @@ Item {
                 model: ExpressionList
 
                 onExpressionCopied: root.contentCopied(expression)
+            }
+
+            FunctionsListView {
+                id: functionList
+
+                model: FunctionList
+
+                onFunctionCopied: root.contentCopied(func)
             }
         }
     }

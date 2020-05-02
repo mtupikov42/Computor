@@ -13,4 +13,13 @@ public:
 
 signals:
 	void expressionInserted(const QString& input);
+	void functionInserted(
+	    const QString& functionName,
+	    const QString& expression,
+	    char expressionUnknown
+	);
+	void invalidFunctionUnknownVar();
+
+private:
+	void deductInput(const QString& input);
 };
