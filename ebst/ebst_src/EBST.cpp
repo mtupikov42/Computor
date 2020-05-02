@@ -106,12 +106,10 @@ std::string EBST::toString(OutputType type) const {
 
     switch (type) {
     case OutputType::InfixWithParentheses:
-	case OutputType::Infix: output = outputInfix(m_rootNode, type == OutputType::InfixWithParentheses); break;
-	case OutputType::Postfix: output = outputPostfix(m_rootNode); break;
-	case OutputType::Prefix: output = outputPrefix(m_rootNode); break;
-    case OutputType::ReducedInfixWithParentheses:
-	case OutputType::ReducedInfix: output = outputInfix(m_balancedTreeRootNode, type == OutputType::ReducedInfixWithParentheses); break;
-    }
+	case OutputType::Infix: output = outputInfix(m_balancedTreeRootNode, type == OutputType::InfixWithParentheses); break;
+	case OutputType::Postfix: output = outputPostfix(m_balancedTreeRootNode); break;
+	case OutputType::Prefix: output = outputPrefix(m_balancedTreeRootNode); break;
+	}
 
 	return output + equalToZero;
 }

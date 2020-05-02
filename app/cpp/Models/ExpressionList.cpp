@@ -25,7 +25,6 @@ QVariant ExpressionList::data(const QModelIndex& index, int role) const {
 	case Role::InfixWithParenthesesString: return d->toString(ExpressionModel::OutputType::InfixWithParentheses);
 	case Role::PostfixString: return d->toString(ExpressionModel::OutputType::Postfix);
 	case Role::PrefixString: return d->toString(ExpressionModel::OutputType::Prefix);
-	case Role::ReducedInfixString: return d->toString(ExpressionModel::OutputType::ReducedInfix);
 	case Role::ErrorString: return d->errorString();
 	default:
 		qFatal("unhandled role");
@@ -53,7 +52,6 @@ QHash<int, QByteArray> ExpressionList::roleNames() const {
 		{ Role::InfixWithParenthesesString, "infixWithParenthesesStringRole" },
 		{ Role::PostfixString, "postfixStringRole" },
 		{ Role::PrefixString, "prefixStringRole" },
-		{ Role::ReducedInfixString, "reducedInfixStringRole" },
 		{ Role::ErrorString, "errorStringRole" }
 	};
 

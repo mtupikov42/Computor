@@ -5,6 +5,7 @@ import "../Controls"
 
 import SizeProvider 1.0
 import SpecialSymbols 1.0
+import ComputorQmlPlugin 1.0
 
 Item {
     id: root
@@ -19,7 +20,6 @@ Item {
     property string infixWithParenthesesString
     property string postfixString
     property string prefixString
-    property string reducedInfixString
     property string errorString
 
     readonly property Loader currentLoader: errorState ? errorLoader : normalLoader
@@ -106,8 +106,8 @@ Item {
             ColumnLayout {
                 Layout.fillHeight: true
                 Layout.leftMargin: root.layoutMargin
+                Layout.alignment: Qt.AlignTop
 
-                implicitWidth: Math.max(expressionText.width, degreeText.width, solRepeater.width)
                 spacing: SizeProvider.metric(3)
 
                 CText {
@@ -146,6 +146,8 @@ Item {
                 CIconButton {
                     id: copyNormalIcon
 
+                    Layout.alignment: Qt.AlignRight
+
                     text: SpecialSymbols.faClone
                     tooltip.text: qsTr("Copy expression")
 
@@ -155,10 +157,50 @@ Item {
                 CIconButton {
                     id: removeNormalIcon
 
+                    Layout.alignment: Qt.AlignRight
+
                     text: SpecialSymbols.faTimes
                     tooltip.text: qsTr("Delete")
 
                     onPressed: root.requestRemove()
+                }
+
+                CComboBox {
+                    id: exprType
+
+                    Layout.alignment: Qt.AlignRight
+
+                    implicitWidth: SizeProvider.metric(160)
+                    model: [
+                        "Infix",
+                        "Infix with parentheses",
+                        "Postfix",
+                        "Prefix"
+                    ]
+
+                    onCurrentIndexChanged: {
+                        if (currentIndex === 0) {
+                            expressionText.text = root.infixString
+                            return
+                        }
+
+                        if (currentIndex === 1) {
+                            expressionText.text = root.infixWithParenthesesString
+                            return
+                        }
+
+                        if (currentIndex === 2) {
+                            expressionText.text = root.postfixString
+                            return
+                        }
+
+                        if (currentIndex === 3) {
+                            expressionText.text = root.prefixString
+                            return
+                        }
+
+                        expressionText.text = root.rawExpressionString
+                    }
                 }
 
                 Item {

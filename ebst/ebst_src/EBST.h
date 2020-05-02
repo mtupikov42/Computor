@@ -26,9 +26,7 @@ public:
 		Infix,
         InfixWithParentheses,
         Postfix,
-		Prefix,
-        ReducedInfix,
-		ReducedInfixWithParentheses
+		Prefix
 	};
 
 	explicit EBST(const std::string& expressionString);

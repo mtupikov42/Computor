@@ -17,7 +17,6 @@ public:
 		InfixWithParenthesesString,
 		PostfixString,
 		PrefixString,
-		ReducedInfixString,
 		ErrorString
 	};
 	Q_ENUM(Role)

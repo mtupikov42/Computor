@@ -50,7 +50,6 @@ Item {
                 infixWithParenthesesString: infixWithParenthesesStringRole
                 postfixString: postfixStringRole
                 prefixString: prefixStringRole
-                reducedInfixString: reducedInfixStringRole
                 errorString: errorStringRole
 
                 onExpressionCopied: root.expressionCopied(expression)

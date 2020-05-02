@@ -19,9 +19,7 @@ public:
 		Infix,
 		InfixWithParentheses,
 		Postfix,
-		Prefix,
-		ReducedInfix,
-		ReducedInfixWithParentheses
+		Prefix
 	};
 	Q_ENUM(OutputType)
 

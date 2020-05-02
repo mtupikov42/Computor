@@ -23,9 +23,7 @@ QString ExpressionModel::toString(OutputType type) const {
 		{ OutputType::Infix, EBST::OutputType::Infix },
 		{ OutputType::Prefix, EBST::OutputType::Prefix },
 		{ OutputType::Postfix, EBST::OutputType::Postfix },
-		{ OutputType::ReducedInfix, EBST::OutputType::ReducedInfix },
 		{ OutputType::InfixWithParentheses, EBST::OutputType::InfixWithParentheses },
-		{ OutputType::ReducedInfixWithParentheses, EBST::OutputType::ReducedInfixWithParentheses }
 	};
 
 	if (!m_expressionTree.has_value()) {
