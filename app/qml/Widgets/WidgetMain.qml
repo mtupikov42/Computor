@@ -31,11 +31,11 @@ Rectangle {
         anchors {
             top: parent.top
             bottom: parent.bottom
-            horizontalCenter: parent.horizontalCenter
+            left: parent.left
             margins: SizeProvider.metric(5)
         }
 
-        width: parent.width - SizeProvider.metric(10)
+        width: SizeProvider.metric(500)
         spacing: SizeProvider.metric(10)
 
         WidgetComputorHistoryArea {
