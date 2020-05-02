@@ -27,6 +27,7 @@ Item {
     readonly property real layoutMargin: SizeProvider.metric(10)
 
     signal expressionCopied(string expression)
+    signal requestRemove()
 
     Loader {
         id: errorLoader
@@ -53,6 +54,7 @@ Item {
             CErrorText {
                 id: errorText
 
+                Layout.alignment: Qt.AlignTop
                 Layout.leftMargin: root.layoutMargin
 
                 text: root.rawExpressionString
@@ -69,15 +71,25 @@ Item {
                 Layout.fillHeight: true
                 Layout.rightMargin: root.layoutMargin
 
-                implicitWidth: copyNormalIcon.width
+                implicitWidth: copyErrorIcon.width
 
                 CIconButton {
-                    id: copyNormalIcon
+                    id: copyErrorIcon
 
                     text: SpecialSymbols.faClone
                     tooltip.text: qsTr("Copy expression")
 
                     onPressed: root.expressionCopied(errorText.text)
+                }
+
+
+                CIconButton {
+                    id: removeErrorIcon
+
+                    text: SpecialSymbols.faTimes
+                    tooltip.text: qsTr("Delete")
+
+                    onPressed: root.requestRemove()
                 }
 
                 Item {
@@ -138,6 +150,15 @@ Item {
                     tooltip.text: qsTr("Copy expression")
 
                     onPressed: root.expressionCopied(expressionText.text)
+                }
+
+                CIconButton {
+                    id: removeNormalIcon
+
+                    text: SpecialSymbols.faTimes
+                    tooltip.text: qsTr("Delete")
+
+                    onPressed: root.requestRemove()
                 }
 
                 Item {

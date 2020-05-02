@@ -54,6 +54,7 @@ Item {
                 errorString: errorStringRole
 
                 onExpressionCopied: root.expressionCopied(expression)
+                onRequestRemove: expressionsView.model.remove(index)
 
                 CDecorationLine {
                     anchors {
@@ -64,6 +65,5 @@ Item {
                 }
             }
         }
-
     }
 }

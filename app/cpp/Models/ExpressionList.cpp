@@ -1,8 +1,12 @@
 #include "ExpressionList.h"
 
-ExpressionList::ExpressionList(QObject* parent) : QmlListModel(parent) {
+#include <QLoggingCategory>
 
-}
+namespace L {
+Q_LOGGING_CATEGORY(expression_list, "app.expression.list", QtInfoMsg);
+} // end namespace L
+
+ExpressionList::ExpressionList(QObject* parent) : QmlListModel(parent) {}
 
 QVariant ExpressionList::data(const QModelIndex& index, int role) const {
 	if (!isValid(index)) {
@@ -60,6 +64,17 @@ void ExpressionList::add(const ExpressionModel::Ptr& model) {
 	beginInsertRows({}, rowCount(), rowCount());
 	m_expModels.push_back(model);
 	endInsertRows();
+}
+
+void ExpressionList::remove(int index) {
+	if (index < 0 || index >= m_expModels.size()) {
+		qCWarning(L::expression_list) << "Invalid index" << index;
+		return;
+	}
+
+	beginRemoveRows({}, index, index);
+	m_expModels.remove(index);
+	endRemoveRows();
 }
 
 void ExpressionList::resetModelData() {}

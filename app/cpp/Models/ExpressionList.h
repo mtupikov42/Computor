@@ -29,6 +29,7 @@ public:
 	int rowCount(const QModelIndex& = {}) const override;
 	QHash<int, QByteArray> roleNames() const override;
 	void add(const ExpressionModel::Ptr& model);
+	Q_INVOKABLE void remove(int index);
 
 private:
 	void resetModelData() override;

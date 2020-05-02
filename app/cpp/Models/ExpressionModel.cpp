@@ -6,13 +6,9 @@
 
 #include "ExpressionException.h"
 
-namespace {
-
 namespace L {
 Q_LOGGING_CATEGORY(expression_model, "app.expression.model", QtInfoMsg);
 } // end namespace L
-
-} // end anonymous namespace
 
 void ExpressionModel::RegisterType(const char* uri) {
 	qmlRegisterUncreatableType<ExpressionModel>(uri, 1, 0, "ExpressionModel", "ExpressionModel must be created on C++ side");
