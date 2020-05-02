@@ -336,7 +336,14 @@ std::vector<ExpressionNode> EBST::parseExpression(const std::string& expr, int p
 
 	assert(unknownOperands.size() <= 1 && "missed multiple unknown operands");
 	if (unknownOperands.size() == 1) {
-		m_unknownOperandName = static_cast<char>(*unknownOperands.cbegin());
+		const auto operandName = static_cast<char>(*unknownOperands.cbegin());
+		const auto currentOperandName = m_unknownOperandName.front();
+
+		if (currentOperandName != invalidOperandVarName && currentOperandName != operandName) {
+			throw ExpressionException(ExpressionError::MultipleUnknownOperands, getErrorColumn(0));
+		}
+
+		m_unknownOperandName = operandName;
 	}
 
 	if (output.empty()) {
