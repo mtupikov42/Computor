@@ -25,7 +25,7 @@ void InputModel::deductInput(const QString& input) {
 		const auto expr = funcMatch.captured(3).toLower();
 
 		if (varNameStr.length() != 1) {
-			emit invalidFunctionUnknownVar();
+			emit errorOccured(tr("Function unknown variable name must consist of one character"));
 			return;
 		}
 

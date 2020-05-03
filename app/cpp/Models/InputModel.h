@@ -18,7 +18,7 @@ signals:
 	    const QString& expression,
 	    char expressionUnknown
 	);
-	void invalidFunctionUnknownVar();
+	void errorOccured(const QString& error);
 
 private:
 	void deductInput(const QString& input);

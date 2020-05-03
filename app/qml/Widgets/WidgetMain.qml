@@ -74,8 +74,8 @@ Rectangle {
         Connections {
             target: InputModel
 
-            onInvalidFunctionUnknownVar: {
-                inputField.tooltip.text = qsTr("Function unknown variable name must consist of one character")
+            onErrorOccured: {
+                inputField.tooltip.text = error
                 inputField.tooltip.visible = true
             }
 
