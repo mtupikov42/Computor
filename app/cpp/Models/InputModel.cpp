@@ -52,7 +52,7 @@ void InputModel::deductInput(const QString& input) {
 }
 
 void InputModel::tryToResolve(const QString& input) {
-	const auto funcNames = m_funcList->functionsNames();
+	const auto funcNames = m_funcList->validFunctionsNames();
 	QString resultExpression = input;
 
 	for (auto i = 0; i < funcNames.size();) {

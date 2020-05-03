@@ -77,11 +77,13 @@ void FunctionList::remove(int index) {
 	endRemoveRows();
 }
 
-QStringList FunctionList::functionsNames() const {
+QStringList FunctionList::validFunctionsNames() const {
 	QStringList lst;
 
 	for (const auto& f : m_funModels) {
-		lst.append(f->functionName());
+		if (f->isValid()) {
+			lst.append(f->functionName());
+		}
 	}
 
 	return lst;

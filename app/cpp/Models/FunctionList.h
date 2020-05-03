@@ -24,7 +24,7 @@ public:
 	const FunctionModel::Ptr& at(int index) const;
 	void add(const FunctionModel::Ptr& model);
 	Q_INVOKABLE void remove(int index);
-	QStringList functionsNames() const;
+	QStringList validFunctionsNames() const;
 
 private:
 	void resetModelData() override;
