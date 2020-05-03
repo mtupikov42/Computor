@@ -17,7 +17,7 @@ FunctionModel::FunctionModel(
     , m_expressionUnknown(expressionUnknown)
     , m_functionName(functionName)
 {
-	checkVariableName();
+	checkErrorState();
 }
 
 QString FunctionModel::expressionUnknownName() const {
@@ -48,7 +48,7 @@ bool FunctionModel::isValid() const {
 	return m_errorColumn < 0;
 }
 
-void FunctionModel::checkVariableName() {
+void FunctionModel::checkErrorState() {
 	if (m_expressionUnknown != m_expressionModel->unknownVariableName()) {
 		m_errorColumn = functionName().size() + 1;
 		m_errorString = tr("Variable name in function and in expression doesn't match");

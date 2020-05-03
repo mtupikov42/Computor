@@ -31,7 +31,7 @@ public:
 	bool isValid() const;
 
 private:
-	void checkVariableName();
+	void checkErrorState();
 
 	QPointer<ExpressionModel> m_expressionModel;
 	QString m_expressionUnknown;
