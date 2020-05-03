@@ -34,7 +34,7 @@ private:
 	QString m_expressionUnknown;
 	QString m_functionName;
 	QString m_errorString;
-	int m_errorColumn;
+	int m_errorColumn = -1;
 };
 
 using FunctionModels = QVector<FunctionModel::Ptr>;

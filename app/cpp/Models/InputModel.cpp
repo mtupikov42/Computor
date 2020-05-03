@@ -53,14 +53,16 @@ void InputModel::deductInput(const QString& input) {
 
 void InputModel::tryToResolve(const QString& input) {
 	const auto funcNames = m_funcList->functionsNames();
+	QString resultExpression = input;
 
-	auto i = 0;
-	for (const auto& f : funcNames) {
+	for (auto i = 0; i < funcNames.size();) {
+		const auto f = funcNames[i];
 		QRegularExpressionMatch match;
-		const QString regStr = f + "\\((.+)\\)";
-		if (input.contains(QRegularExpression(regStr), &match)) {
+		const QString regStr = f + "\\((\\-?\\d*\\.?\\d+)\\)";
+		if (resultExpression.contains(QRegularExpression(regStr), &match)) {
 			bool ok;
-			const auto funcVar = QString::number(match.captured(1).toDouble(&ok));
+			const auto capturedNumberStr = match.captured(1);
+			const auto capturedNumber = QString::number(capturedNumberStr.toDouble(&ok));
 
 			if (!ok) {
 				emit errorOccured(tr("Invalid variable or number in function ") + f);
@@ -70,13 +72,17 @@ void InputModel::tryToResolve(const QString& input) {
 			const auto& exprPtr = m_funcList->at(i);
 			auto exprStr = exprPtr->expressionString();
 			const auto exprVar = exprPtr->expressionUnknownName();
+			exprStr.replace(exprVar, capturedNumber, Qt::CaseInsensitive);
 
-			exprStr.replace(exprVar, funcVar, Qt::CaseInsensitive);
+			const auto funcToReplace = QString("%1(%2)").arg(f).arg(capturedNumber);
+			resultExpression.replace(funcToReplace, exprStr, Qt::CaseInsensitive);
 
-			emit expressionInserted(exprStr, true);
-			qCDebug(L::input_model) << "Expression resolved and inserted:" << input;
+			continue;
 		}
 
 		++i;
 	}
+
+	emit expressionInserted(resultExpression, true);
+	qCDebug(L::input_model) << "Expression resolved and inserted:" << resultExpression;
 }
