@@ -31,6 +31,7 @@ public:
 	QStringList solutionList() const;
 	QString rawExpression() const;
 	QString errorString() const;
+	QString unknownVariableName() const;
 
 private:
 	bool treeIsValid() const;

@@ -28,8 +28,11 @@ public:
 	QString toString() const;
 	QString errorString() const;
 	int errorColumn() const;
+	bool isValid() const;
 
 private:
+	void checkVariableName();
+
 	QPointer<ExpressionModel> m_expressionModel;
 	QString m_expressionUnknown;
 	QString m_functionName;

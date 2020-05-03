@@ -101,6 +101,10 @@ QString ExpressionModel::errorString() const {
 	return m_errorString;
 }
 
+QString ExpressionModel::unknownVariableName() const {
+	return QString::fromStdString(m_expressionTree->unknownOperandName());
+}
+
 QString ExpressionModel::rawExpression() const {
 	return m_rawExpression;
 }
