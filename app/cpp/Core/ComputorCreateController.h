@@ -12,7 +12,7 @@ public:
 	explicit ComputorCreateController(QObject* parent = nullptr);
 
 public slots:
-	void createExpression(const QString& input);
+	void createExpression(const QString& input, bool inFunction);
 	void createFunction(
 	    const QString& functionName,
 	    const QString& expression,

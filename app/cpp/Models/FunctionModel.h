@@ -23,6 +23,7 @@ public:
 	);
 
 	QString expressionUnknownName() const;
+	QString expressionString() const;
 	QString functionName() const;
 	QString toString() const;
 	QString errorString() const;

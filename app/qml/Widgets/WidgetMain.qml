@@ -55,6 +55,7 @@ Rectangle {
             placeholderText: qsTr("Please enter function / variable / matrix..")
             tooltip.visible: false
             tooltip.color: QmlColorPalette.generic.error
+            tooltip.placement: Theme.Right
 
             function textIsWhitespaceOnly(text) {
                 return text.replace(/\s/g, '').length === 0

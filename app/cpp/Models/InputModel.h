@@ -2,17 +2,20 @@
 
 #include <QObject>
 #include <QString>
+#include <QPointer>
+
+class FunctionList;
 
 class InputModel : public QObject {
 	Q_OBJECT
 
 public:
-	explicit InputModel(QObject* parent = nullptr);
+	explicit InputModel(FunctionList* funcList, QObject* parent = nullptr);
 
 	Q_INVOKABLE void readInput(const QString& input);
 
 signals:
-	void expressionInserted(const QString& input);
+	void expressionInserted(const QString& input, bool inFunction);
 	void functionInserted(
 	    const QString& functionName,
 	    const QString& expression,
@@ -22,4 +25,7 @@ signals:
 
 private:
 	void deductInput(const QString& input);
+	void tryToResolve(const QString& input);
+
+	QPointer<FunctionList> m_funcList;
 };

@@ -21,8 +21,10 @@ public:
 	bool setData(const QModelIndex& index, const QVariant& value, int role) override;
 	int rowCount(const QModelIndex& = {}) const override;
 	QHash<int, QByteArray> roleNames() const override;
+	const FunctionModel::Ptr& at(int index) const;
 	void add(const FunctionModel::Ptr& model);
 	Q_INVOKABLE void remove(int index);
+	QStringList functionsNames() const;
 
 private:
 	void resetModelData() override;

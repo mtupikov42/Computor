@@ -23,13 +23,16 @@ QString FunctionModel::expressionUnknownName() const {
 	return m_expressionUnknown;
 }
 
+QString FunctionModel::expressionString() const {
+	return m_expressionModel->toString(ExpressionModel::OutputType::Infix);
+}
+
 QString FunctionModel::functionName() const {
 	return m_functionName;
 }
 
 QString FunctionModel::toString() const {
-	const auto expressionString = m_expressionModel->toString(ExpressionModel::OutputType::Infix);
-	return QString("%1(%2) = %3").arg(functionName()).arg(expressionUnknownName()).arg(expressionString);
+	return QString("%1(%2) = %3").arg(functionName()).arg(expressionUnknownName()).arg(expressionString());
 }
 
 QString FunctionModel::errorString() const {

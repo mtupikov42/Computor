@@ -24,6 +24,7 @@ Item {
 
     readonly property Loader currentLoader: errorState ? errorLoader : normalLoader
     readonly property bool errorState: errorColumn >= 0
+    readonly property bool showMinimalInfo: degree == 0
     readonly property real layoutMargin: SizeProvider.metric(10)
 
     signal expressionCopied(string expression)
@@ -119,6 +120,7 @@ Item {
                 CText {
                     id: degreeText
 
+                    visible: !root.showMinimalInfo
                     text: qsTr("Degree: ") + root.degree
                 }
 
@@ -127,6 +129,7 @@ Item {
 
                     model: root.solutions
                     delegate: CText {
+                        visible: !root.showMinimalInfo
                         text: modelData
                     }
                 }
@@ -170,6 +173,7 @@ Item {
 
                     Layout.alignment: Qt.AlignRight
 
+                    visible: !root.showMinimalInfo
                     implicitWidth: SizeProvider.metric(160)
                     model: [
                         "Infix",

@@ -37,10 +37,10 @@ void UIManager::initEngine() {
 }
 
 void UIManager::setupUiModels() {
-	m_inputModel = std::make_unique<InputModel>();
 	m_expressionList = std::make_unique<ExpressionList>();
 	m_functionList = std::make_unique<FunctionList>();
 	m_createController = std::make_unique<ComputorCreateController>();
+	m_inputModel = std::make_unique<InputModel>(m_functionList.get());
 
 	QObject::connect(m_inputModel.get(), &InputModel::expressionInserted, m_createController.get(), &ComputorCreateController::createExpression);
 	QObject::connect(m_inputModel.get(), &InputModel::functionInserted, m_createController.get(), &ComputorCreateController::createFunction);

@@ -2,8 +2,8 @@
 
 ComputorCreateController::ComputorCreateController(QObject* parent) : QObject(parent) {}
 
-void ComputorCreateController::createExpression(const QString& input) {
-	auto model = QSharedPointer<ExpressionModel>::create(input, false);
+void ComputorCreateController::createExpression(const QString& input, bool inFunction) {
+	auto model = QSharedPointer<ExpressionModel>::create(input, inFunction);
 
 	emit expressionModelCreated(model);
 }

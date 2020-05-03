@@ -46,6 +46,12 @@ QHash<int, QByteArray> FunctionList::roleNames() const {
 	return role_names;
 }
 
+const FunctionModel::Ptr& FunctionList::at(int index) const {
+	Q_ASSERT(index >= 0 && index < m_funModels.size());
+
+	return m_funModels[index];
+}
+
 void FunctionList::add(const FunctionModel::Ptr& model) {
 	for (auto& f : m_funModels) {
 		if (f->functionName().toLower() == model->functionName().toLower()) {
@@ -69,6 +75,16 @@ void FunctionList::remove(int index) {
 	beginRemoveRows({}, index, index);
 	m_funModels.remove(index);
 	endRemoveRows();
+}
+
+QStringList FunctionList::functionsNames() const {
+	QStringList lst;
+
+	for (const auto& f : m_funModels) {
+		lst.append(f->functionName());
+	}
+
+	return lst;
 }
 
 void FunctionList::resetModelData() {}
