@@ -38,8 +38,7 @@ Item {
     Flickable {
         id: flickable
 
-        width: root.width
-        height: root.height
+        anchors.fill: parent
         boundsBehavior: Flickable.StopAtBounds
         boundsMovement: Flickable.StopAtBounds
         flickableDirection: Flickable.VerticalFlick
@@ -66,7 +65,6 @@ Item {
             id: textAreaItem
 
             width: root.width
-            height: root.height
             color: QmlColorPalette.normal.text
             selectionColor: QmlColorPalette.generic.textSelection
             selectedTextColor: QmlColorPalette.generic.textSelection
@@ -171,7 +169,7 @@ Item {
         }
 
         ScrollBar.vertical: CScrollBar {
-            policy: ScrollBar.AsNeeded
+            policy: (flickable.contentHeight > flickable.height) ? ScrollBar.AsNeeded : ScrollBar.AlwaysOff
             padding: SizeProvider.metric(2)
         }
     }
