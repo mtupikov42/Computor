@@ -27,7 +27,24 @@ Rectangle {
         onClicked: forceActiveFocus()
     }
 
-    ColumnLayout {
+    Connections {
+        target: InputModel
+
+        onErrorOccured: {
+            inputField.tooltip.text = error
+            inputField.tooltip.visible = true
+        }
+
+        onExpressionInserted: {
+            historyArea.selectExpressions()
+        }
+
+        onFunctionInserted: {
+            historyArea.selectFunctions()
+        }
+    }
+
+    RowLayout {
         anchors {
             top: parent.top
             bottom: parent.bottom
@@ -35,57 +52,45 @@ Rectangle {
             margins: SizeProvider.metric(5)
         }
 
-        width: SizeProvider.metric(500)
-        spacing: SizeProvider.metric(10)
+        ColumnLayout {
+            Layout.preferredWidth: SizeProvider.metric(500)
 
-        WidgetComputorHistoryArea {
-            id: historyArea
+            spacing: SizeProvider.metric(10)
 
-            Layout.fillHeight: true
-            Layout.fillWidth: true
+            WidgetComputorHistoryArea {
+                id: historyArea
 
-            onContentCopied: inputField.text = content
-        }
+                Layout.fillHeight: true
+                Layout.fillWidth: true
 
-        CTextField {
-            id: inputField
-
-            Layout.fillWidth: true
-
-            placeholderText: qsTr("Please enter function / variable / matrix..")
-            tooltip.visible: false
-            tooltip.color: QmlColorPalette.generic.error
-            tooltip.placement: Theme.Right
-
-            function textIsWhitespaceOnly(text) {
-                return text.replace(/\s/g, '').length === 0
+                onContentCopied: inputField.text = content
             }
 
-            onAccepted: {
-                var textIsEmpty = text.length === 0
+            CTextField {
+                id: inputField
 
-                if (!textIsEmpty && !textIsWhitespaceOnly(text)) {
-                    InputModel.readInput(text)
+                Layout.fillWidth: true
+
+                placeholderText: qsTr("Please enter function / variable / matrix..")
+                tooltip.visible: false
+                tooltip.color: QmlColorPalette.generic.error
+                tooltip.placement: Theme.Right
+
+                function textIsWhitespaceOnly(text) {
+                    return text.replace(/\s/g, '').length === 0
                 }
 
-                text = ""
-            }
-        }
+                onAccepted: {
+                    var textIsEmpty = text.length === 0
 
-        Connections {
-            target: InputModel
+                    if (!textIsEmpty && !textIsWhitespaceOnly(text)) {
+                        commandHistoryArea.text += "\n"
+                        commandHistoryArea.text += text
+                        InputModel.readInput(text)
+                    }
 
-            onErrorOccured: {
-                inputField.tooltip.text = error
-                inputField.tooltip.visible = true
-            }
-
-            onExpressionInserted: {
-                historyArea.selectExpressions()
-            }
-
-            onFunctionInserted: {
-                historyArea.selectFunctions()
+                    text = ""
+                }
             }
         }
     }
