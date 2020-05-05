@@ -17,12 +17,12 @@ Item {
     property var inputModel: null // InputModel C++
     property int historyPlacement: Theme.Top // only Top or Bottom
 
-    Flickable {
+    Rectangle {
         id: historyArea
 
         visible: false
         width: root.width
-        height: SizeProvider.metric(160)
+        height: SizeProvider.metric(150)
         anchors {
             top: root.historyPlacement === Theme.Bottom ? mainRow.bottom : undefined
             bottom: root.historyPlacement === Theme.Top ? mainRow.top : undefined
@@ -30,58 +30,60 @@ Item {
             right: mainRow.right
             bottomMargin: root.historyPlacement === Theme.Top ? SizeProvider.metric(5) : 0
             topMargin: root.historyPlacement === Theme.Bottom ? SizeProvider.metric(5) : 0
+        }            color: QmlColorPalette.normal.background
+        radius: Theme.defaultBorderRadius
+
+        MouseArea {
+            anchors.fill: parent
+            enabled: historyArea.visible
+            preventStealing: true
+            hoverEnabled: true
+            onWheel: wheel.accepted = true
+            onPressed: mouse.accepted = true
+            onReleased: mouse.accepted = true
         }
 
-        Rectangle {
+        ListView {
+            id: btnsView
+
             anchors.fill: parent
-            color: QmlColorPalette.normal.background
-            radius: Theme.defaultBorderRadius
-
-            MouseArea {
-                anchors.fill: parent
-                enabled: btnsView.visible
-                preventStealing: true
-                hoverEnabled: true
-                onWheel: wheel.accepted = true
-                onPressed: mouse.accepted = true
-                onReleased: mouse.accepted = true
+            clip: true
+            boundsBehavior: Flickable.StopAtBounds
+            keyNavigationEnabled: true
+            keyNavigationWraps: true
+            ScrollBar.vertical: CScrollBar {
+                policy: (btnsView.contentHeight > btnsView.height) ? ScrollBar.AsNeeded : ScrollBar.AlwaysOff
             }
-
-            ListView {
-                id: btnsView
-
-                anchors.fill: parent
-                delegate: CButton {
-                    width: btnsView.width
-                    border.color: QmlColorPalette.generic.transparent
-                    radius: 0
-                    text: modelRole
-                    textHorizontalAlignment: Qt.AlignLeft
-                    backgroundColor: {
-                        if (!root.enabled) {
-                            return QmlColorPalette.disabled.background
-                        }
-
-                        if (root.pressed || root.highlighted) {
-                            return QmlColorPalette.active.background
-                        }
-
-                        if (index % 2 === 0) {
-                            return QmlColorPalette.hovered.background
-                        }
-
-                        return QmlColorPalette.normal.background
+            delegate: CButton {
+                width: btnsView.width
+                border.color: QmlColorPalette.generic.transparent
+                radius: 0
+                text: modelRole
+                textHorizontalAlignment: Qt.AlignLeft
+                backgroundColor: {
+                    if (!root.enabled) {
+                        return QmlColorPalette.disabled.background
                     }
 
-                    onPressed: {
-                        historyArea.visible = false
-                        textField.text = text
-                        textField.forceActiveFocus()
+                    if (root.pressed || root.highlighted) {
+                        return QmlColorPalette.active.background
                     }
+
+                    if (index % 2 === 0) {
+                        return QmlColorPalette.hovered.background
+                    }
+
+                    return QmlColorPalette.normal.background
                 }
 
-                onCountChanged: currentIndex = count - 1
+                onPressed: {
+                    historyArea.visible = false
+                    textField.text = text
+                    textField.forceActiveFocus()
+                }
             }
+
+            onCountChanged: currentIndex = count - 1
         }
     }
 
@@ -109,6 +111,10 @@ Item {
                 }
 
                 text = ""
+            }
+
+            onPressed: {
+                historyArea.visible = false
             }
         }
 
