@@ -8,6 +8,7 @@
 
 #include "Core/ComputorCreateController.h"
 
+#include "Models/InputHistoryList.h"
 #include "Models/InputModel.h"
 #include "Models/ExpressionList.h"
 #include "Models/FunctionList.h"
@@ -28,6 +29,7 @@ void UIManager::initEngine() {
 
 	auto* rootContext = m_engine->rootContext();
 	rootContext->setContextProperty("UIController", m_uiController.get());
+	rootContext->setContextProperty("InputHistoryList", m_inputHistoryList.get());
 	rootContext->setContextProperty("InputModel", m_inputModel.get());
 	rootContext->setContextProperty("ExpressionList", m_expressionList.get());
 	rootContext->setContextProperty("FunctionList", m_functionList.get());
@@ -41,6 +43,7 @@ void UIManager::setupUiModels() {
 	m_functionList = std::make_unique<FunctionList>();
 	m_createController = std::make_unique<ComputorCreateController>();
 	m_inputModel = std::make_unique<InputModel>(m_functionList.get());
+	m_inputHistoryList = std::make_unique<InputHistoryList>();
 
 	QObject::connect(m_inputModel.get(), &InputModel::expressionInserted, m_createController.get(), &ComputorCreateController::createExpression);
 	QObject::connect(m_inputModel.get(), &InputModel::functionInserted, m_createController.get(), &ComputorCreateController::createFunction);

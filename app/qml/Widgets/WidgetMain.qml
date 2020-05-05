@@ -66,31 +66,17 @@ Rectangle {
                 onContentCopied: inputField.text = content
             }
 
-            CTextField {
+            CTextFieldWithHistory {
                 id: inputField
 
                 Layout.fillWidth: true
 
-                placeholderText: qsTr("Please enter function / variable / matrix..")
-                tooltip.visible: false
-                tooltip.color: QmlColorPalette.generic.error
-                tooltip.placement: Theme.Right
-
-                function textIsWhitespaceOnly(text) {
-                    return text.replace(/\s/g, '').length === 0
-                }
-
-                onAccepted: {
-                    var textIsEmpty = text.length === 0
-
-                    if (!textIsEmpty && !textIsWhitespaceOnly(text)) {
-                        commandHistoryArea.text += "\n"
-                        commandHistoryArea.text += text
-                        InputModel.readInput(text)
-                    }
-
-                    text = ""
-                }
+                historyModel: InputHistoryList
+                inputModel: InputModel
+                textField.placeholderText: qsTr("Please enter function / variable / matrix..")
+                textField.tooltip.visible: false
+                textField.tooltip.color: QmlColorPalette.generic.error
+                textField.tooltip.placement: Theme.Right
             }
         }
     }

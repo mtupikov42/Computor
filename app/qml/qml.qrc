@@ -34,6 +34,7 @@
 		<file>Controls/CText.qml</file>
 		<file>Controls/CTextArea.qml</file>
 		<file>Controls/CTextField.qml</file>
+		<file>Controls/CTextFieldWithHistory.qml</file>
 		<file>Controls/CTextInputCursor.qml</file>
 		<file>Controls/CToolTip.qml</file>
 		<file>Controls/CToolTipBackground.qml</file>

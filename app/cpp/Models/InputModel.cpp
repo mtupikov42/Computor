@@ -6,7 +6,7 @@
 #include "Models/FunctionList.h"
 
 namespace L {
-Q_LOGGING_CATEGORY(input_model, "app.input_model", QtInfoMsg);
+Q_LOGGING_CATEGORY(input_model, "app.input.model", QtInfoMsg);
 } // end namespace L
 
 InputModel::InputModel(FunctionList* funcList, QObject* parent)

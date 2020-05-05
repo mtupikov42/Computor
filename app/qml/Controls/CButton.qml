@@ -19,6 +19,9 @@ Templates.Button {
 
     property alias radius: backgroundItem.radius
     property alias border: backgroundItem.border
+    property alias textElide: contentText.elide
+    property alias textHorizontalAlignment: contentText.horizontalAlignment
+    property alias textVerticalAlignment: contentText.verticalAlignment
 
     property color color: {
         if (!root.enabled) {
@@ -54,6 +57,7 @@ Templates.Button {
 
     background: Rectangle {
         id: backgroundItem
+
         radius: Theme.defaultBorderRadius
         border.width: Theme.defaultBorderWidth
         border.color: QmlColorPalette.normal.border
@@ -64,6 +68,7 @@ Templates.Button {
 
     contentItem: CText {
         id: contentText
+
         text: root.text
         color: root.color
         font: root.font

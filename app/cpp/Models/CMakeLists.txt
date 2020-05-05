@@ -3,6 +3,7 @@ set(source
 	ExpressionModel.cpp
 	FunctionList.cpp
 	FunctionModel.cpp
+	InputHistoryList.cpp
 	InputModel.cpp
 )
 
@@ -11,6 +12,7 @@ set(headers
 	ExpressionModel.h
 	FunctionList.h
 	FunctionModel.h
+	InputHistoryList.h
 	InputModel.h
 )
 

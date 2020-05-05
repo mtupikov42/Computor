@@ -33,6 +33,7 @@ set(qml
 	Controls/CText.qml
 	Controls/CTextArea.qml
 	Controls/CTextField.qml
+	Controls/CTextFieldWithHistory.qml
 	Controls/CTextInputCursor.qml
 	Controls/CToolTip.qml
 	Controls/CToolTipBackground.qml
