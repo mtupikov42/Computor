@@ -6,14 +6,12 @@ add_library(ebst STATIC
 	NodeOutput.cpp
 	NodeReduce.cpp
 	NodeBalancing.cpp
+	NodeMath.cpp
 	NodeSimplifiers.cpp
 	NodeSolver.cpp
 
 	ExpressionException.h
 	ExpressionException.cpp
-
-	ExpressionNode.h #remove
-	ExpressionNode.cpp #remove
 
 	AbstractExpressionNode.h
 	AbstractExpressionNode.cpp

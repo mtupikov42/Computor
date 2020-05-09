@@ -16,20 +16,20 @@ const std::string numberRegex{"^[+-]?(?=[.]?[0-9])[0-9]*(?:[.][0-9]*)?(?:[Ee][+-
 
 } // end anonymous namespace
 
-NumberNode* AbstractExpressionNode::castToNumberNode(AbstractExpressionNode* node) {
-	return dynamic_cast<NumberNode*>(node);
+NumberNode* AbstractExpressionNode::castToNumberNode() {
+	return dynamic_cast<NumberNode*>(this);
 }
 
-ImaginaryNumberNode* AbstractExpressionNode::castToImaginaryNumberNode(AbstractExpressionNode* node) {
-	return dynamic_cast<ImaginaryNumberNode*>(node);
+UnknownNode* AbstractExpressionNode::castToUnknownNode() {
+	return dynamic_cast<UnknownNode*>(this);
 }
 
-UnknownNode* AbstractExpressionNode::castToUnknownNode(AbstractExpressionNode* node) {
-	return dynamic_cast<UnknownNode*>(node);
+OperatorNode* AbstractExpressionNode::castToOperatorNode() {
+	return dynamic_cast<OperatorNode*>(this);
 }
 
-OperatorNode* AbstractExpressionNode::castToOperatorNode(AbstractExpressionNode* node) {
-	return dynamic_cast<OperatorNode*>(node);
+ImaginaryNumberNode* AbstractExpressionNode::castToImaginaryNumberNode() {
+	return dynamic_cast<ImaginaryNumberNode*>(this);
 }
 
 AbstractExpressionNode::Ptr parseExpressionFromString(const std::string& str) {

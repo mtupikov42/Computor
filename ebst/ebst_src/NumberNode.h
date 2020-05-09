@@ -12,3 +12,5 @@ public:
 private:
 	double m_value = 0.0;
 };
+
+std::string trimDoubleToString(double d);

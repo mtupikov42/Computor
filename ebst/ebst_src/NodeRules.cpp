@@ -39,11 +39,11 @@ EBST::NodePtr EBST::applyRule1ToSubTree(NodePtr& parent) const {
 	auto& unknownNode = leftIsUnknown ? unknownAndSubtreeMulNode->m_left : unknownAndSubtreeMulNode->m_right;
 	auto& subtreeANode = leftIsUnknown ? unknownAndSubtreeMulNode->m_right : unknownAndSubtreeMulNode->m_left;
 
-	auto newRightNode = allocateNode(ExpressionNode(OperatorType::Multiplication));
+	auto newRightNode = allocateNode(std::make_shared<OperatorNode>(OperatorType::Multiplication));
 	newRightNode->m_left = subtreeANode;
 	newRightNode->m_right = subtreeBNode;
 
-	auto result = allocateNode(ExpressionNode(parent->m_keyValue.first));
+	auto result = allocateNode(parent->m_keyValue.first);
 	result->m_left = unknownNode;
 	result->m_right = newRightNode;
 
@@ -68,11 +68,11 @@ EBST::NodePtr EBST::applyRule2ToSubTree(NodePtr& parent) const {
 	auto& numberNode = leftIsNumber ? numberAndSubtreeMulNode->m_left : numberAndSubtreeMulNode->m_right;
 	auto& subtreeANode = leftIsNumber ? numberAndSubtreeMulNode->m_right : numberAndSubtreeMulNode->m_left;
 
-	auto newRightNode = allocateNode(ExpressionNode(OperatorType::Multiplication));
+	auto newRightNode = allocateNode(std::make_shared<OperatorNode>(OperatorType::Multiplication));
 	newRightNode->m_left = subtreeANode;
 	newRightNode->m_right = subtreeBNode;
 
-	auto result = allocateNode(ExpressionNode(parent->m_keyValue.first));
+	auto result = allocateNode(parent->m_keyValue.first);
 	result->m_left = numberNode;
 	result->m_right = newRightNode;
 
@@ -98,7 +98,7 @@ EBST::NodePtr EBST::applyRule3ToSubTree(NodePtr& parent) const {
 	newRightNode->m_left = leftSubtreeNode;
 	newRightNode->m_right = rightSubtreeNode;
 
-	auto result = allocateNode(ExpressionNode(OperatorType::Multiplication));
+	auto result = allocateNode(std::make_shared<OperatorNode>(OperatorType::Multiplication));
 	result->m_left = leftUnknownNode;
 	result->m_right = newRightNode;
 
@@ -119,8 +119,8 @@ EBST::NodePtr EBST::applyRule4ToSubTree(NodePtr& parent) const {
 	auto& rightNumberNode = rightLeftIsNumber ? right->m_left : right->m_right;
 	auto& rightSubtreeNode = rightLeftIsNumber ? right->m_right : right->m_left;
 
-	const auto firstNum = leftNumberNode->m_keyValue.first.operandValue().value;
-	const auto secondNum = rightNumberNode->m_keyValue.first.operandValue().value;
+	const auto firstNum = getExpressionNode(leftNumberNode)->castToNumberNode()->value();
+	const auto secondNum = getExpressionNode(rightNumberNode)->castToNumberNode()->value();
 
 	if (firstNum != secondNum) {
 		return parent;
@@ -132,7 +132,7 @@ EBST::NodePtr EBST::applyRule4ToSubTree(NodePtr& parent) const {
 	newRightNode->m_left = leftSubtreeNode;
 	newRightNode->m_right = rightSubtreeNode;
 
-	auto result = allocateNode(ExpressionNode(OperatorType::Multiplication));
+	auto result = allocateNode(std::make_shared<OperatorNode>(OperatorType::Multiplication));
 	result->m_left = leftNumberNode;
 	result->m_right = newRightNode;
 
@@ -164,9 +164,9 @@ EBST::NodePtr EBST::applyRule5ToSubTree(NodePtr& parent) const {
 	newRightNode->m_left = subtreeANode;
 	newRightNode->m_right = subtreeBNode;
 
-	const auto isSubs = parentOp.operatorType() == OperatorType::Substitution;
+	const auto isSubs = parentOp->castToOperatorNode()->type() == OperatorType::Substitution;
 
-	auto result = allocateNode(ExpressionNode(parentOp));
+	auto result = allocateNode(parentOp);
 	result->m_left = isSubs ? newRightNode : unknownNode;
 	result->m_right = isSubs ? unknownNode : newRightNode;
 
@@ -185,7 +185,7 @@ EBST::NodePtr EBST::applyRule6ToSubTree(NodePtr& parent) const {
 	auto& numberAndSubtreeAddSubNode = leftIsNumberAndSubtreeAddSub ? left : right;
 	auto& subtreeANode = leftIsNumberAndSubtreeAddSub ? right : left;
 	const auto subtreeOp = numberAndSubtreeAddSubNode->m_keyValue.first;
-	const auto isParentOpSub = parentOp.operatorType() == OperatorType::Substitution;
+	const auto isParentOpSub = parentOp->castToOperatorNode()->type() == OperatorType::Substitution;
 
 	if (subtreeANode == right) {
 		return parent;
@@ -244,18 +244,14 @@ EBST::NodeRule EBST::getRuleForSubtree(const NodePtr& node) const {
 }
 
 EBST::NodeRule EBST::getRuleForNode(const NodePtr& node) const {
-	const auto expr = node->m_keyValue.first;
+	const auto expr = getExpressionNode(node);
 
-	switch (expr.type()) {
-	case ExpressionType::Operand: {
-		if (isOperandUnknown(expr.operandValue())) {
-			return NodeRule::UnknownVar;
-		}
-
+	if (expr->castToNumberNode()) {
 		return NodeRule::NumberVar;
-	}
-	case ExpressionType::Operator: {
-		const auto opType = expr.operatorType();
+	} else if (expr->castToUnknownNode()) {
+		return NodeRule::UnknownVar;
+	} else if (expr->castToOperatorNode()) {
+		const auto opType = expr->castToOperatorNode()->type();
 		if (opType == OperatorType::Multiplication) {
 			return NodeRule::Multiplication;
 		} else if (opType == OperatorType::Addition || opType == OperatorType::Substitution) {
@@ -265,9 +261,6 @@ EBST::NodeRule EBST::getRuleForNode(const NodePtr& node) const {
 		} else if (opType == OperatorType::Power) {
 			return NodeRule::Power;
 		}
-		break;
-	}
-	default: return NodeRule::NoRule;
 	}
 
 	return NodeRule::NoRule;

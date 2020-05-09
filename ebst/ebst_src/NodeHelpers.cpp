@@ -12,16 +12,16 @@ OperatorType switchAddSubOp(OperatorType type) {
 
 } // end anonymous namespace
 
-EBST::NodePtr EBST::allocateNode(const ExpressionNode& node) const {
+EBST::NodePtr EBST::allocateNode(const AbstractExpressionNode::Ptr& node) {
 	auto pair = std::make_pair(node, false);
 	return std::make_shared<EBST::Node>(pair);
 }
 
 EBST::NodePtr EBST::createNodeByDegreeAndValue(double value, int degree) const {
 	const auto allocatePowNode = [this](int degree) {
-		const auto degreeNode = allocateNode(ExpressionNode(static_cast<double>(degree)));
-		const auto unknownNode = allocateNode(ExpressionNode(unknownOperandName().front()));
-		auto operatorNode = allocateNode(ExpressionNode(OperatorType::Power));
+		const auto degreeNode = allocateNode(std::make_shared<NumberNode>(static_cast<double>(degree)));
+		const auto unknownNode = allocateNode(std::make_shared<UnknownNode>(unknownOperandName().front()));
+		auto operatorNode = allocateNode(std::make_shared<OperatorNode>(OperatorType::Power));
 		operatorNode->m_left = unknownNode;
 		operatorNode->m_right = degreeNode;
 
@@ -30,18 +30,18 @@ EBST::NodePtr EBST::createNodeByDegreeAndValue(double value, int degree) const {
 
 	switch (degree) {
 	case 0: {
-		return allocateNode(ExpressionNode(value));
+		return allocateNode(std::make_shared<NumberNode>(value));
 	}
 	case 1: {
 		if (value == 1.0) {
-			return allocateNode(ExpressionNode(unknownOperandName().front()));
+			return allocateNode(std::make_shared<UnknownNode>(unknownOperandName().front()));
 		} else if (value == 0.0) {
-			return allocateNode(ExpressionNode(0.0));
+			return allocateNode(std::make_shared<NumberNode>(0.0));
 		}
 
-		const auto valueNode = allocateNode(ExpressionNode(value));
-		const auto unknownNode = allocateNode(ExpressionNode(unknownOperandName().front()));
-		auto operatorNode = allocateNode(ExpressionNode(OperatorType::Multiplication));
+		const auto valueNode = allocateNode(std::make_shared<NumberNode>(value));
+		const auto unknownNode = allocateNode(std::make_shared<UnknownNode>(unknownOperandName().front()));
+		auto operatorNode = allocateNode(std::make_shared<OperatorNode>(OperatorType::Multiplication));
 		operatorNode->m_left = valueNode;
 		operatorNode->m_right = unknownNode;
 
@@ -52,12 +52,12 @@ EBST::NodePtr EBST::createNodeByDegreeAndValue(double value, int degree) const {
 		if (value == 1.0) {
 			return allocatePowNode(degree);
 		} else if (value == 0.0) {
-			return allocateNode(ExpressionNode(0.0));
+			return allocateNode(std::make_shared<NumberNode>(0.0));
 		}
 
-		const auto valueNode = allocateNode(ExpressionNode(value));
+		const auto valueNode = allocateNode(std::make_shared<NumberNode>(value));
 		const auto powNode = allocatePowNode(degree);
-		auto operatorNode = allocateNode(ExpressionNode(OperatorType::Multiplication));
+		auto operatorNode = allocateNode(std::make_shared<OperatorNode>(OperatorType::Multiplication));
 		operatorNode->m_left = valueNode;
 		operatorNode->m_right = powNode;
 
@@ -68,7 +68,7 @@ EBST::NodePtr EBST::createNodeByDegreeAndValue(double value, int degree) const {
 	return nullptr;
 }
 
-ExpressionNode EBST::getExpressionNode(const NodePtr& ptr) const {
+AbstractExpressionNode::Ptr EBST::getExpressionNode(const NodePtr& ptr) const {
 	return ptr->m_keyValue.first;
 }
 
@@ -99,8 +99,8 @@ bool EBST::nodeHasUnknownExpr(const NodePtr& ptr) const {
 
 	const auto leftExpr = getExpressionNode(left);
 	const auto rightExpr = getExpressionNode(right);
-	const auto operandsUnknown = isOperandUnknown(leftExpr.operandValue()) || isOperandUnknown(rightExpr.operandValue());
-	const auto areOperators = isOperator(leftExpr) || isOperator(rightExpr);
+	const auto operandsUnknown = leftExpr->castToUnknownNode() || rightExpr->castToUnknownNode();
+	const auto areOperators = leftExpr->castToOperatorNode() || rightExpr->castToOperatorNode();
 
 	return operandsUnknown && !areOperators;
 }
@@ -110,8 +110,9 @@ int EBST::getMaximumPowerOfSubtree(const EBST::NodePtr& node) const {
 		auto left = node->m_left;
 		auto right = node->m_right;
 
-		if (isOperator(node->m_keyValue.first) && node->m_keyValue.first.operatorType() == OperatorType::Power) {
-			return static_cast<int>(right->m_keyValue.first.operandValue().value);
+		const auto nodeValue = node->m_keyValue.first;
+		if (nodeValue->castToOperatorNode() && nodeValue->castToOperatorNode()->type() == OperatorType::Power) {
+			return static_cast<int>(right->m_keyValue.first->castToNumberNode()->value());
 		}
 
 		const auto leftPower = getMaximumPowerOfSubtree(left);
@@ -120,7 +121,7 @@ int EBST::getMaximumPowerOfSubtree(const EBST::NodePtr& node) const {
 		return std::max(leftPower, rightPower);
 	}
 
-	const auto nodeIsUnknownVar = isOperandUnknown(node->m_keyValue.first.operandValue());
+	const bool nodeIsUnknownVar = node->m_keyValue.first->castToUnknownNode();
 	return nodeIsUnknownVar ? 1 : 0;
 }
 
@@ -135,7 +136,7 @@ int EBST::countUnknownVars(const NodePtr& node) const {
 		return leftCount + rightCount;
 	}
 
-	const auto nodeIsUnknownVar = isOperandUnknown(node->m_keyValue.first.operandValue());
+	const bool nodeIsUnknownVar = node->m_keyValue.first->castToUnknownNode();
 	return nodeIsUnknownVar ? 1 : 0;
 }
 
@@ -149,16 +150,18 @@ double EBST::retrieveNumberFromNode(const NodePtr& node, OperatorType prevOp, bo
 	const auto modifier = prevOp == OperatorType::Substitution && !isFirst ? -1.0 : 1.0;
 
 	if (rule == NodeRule::NumberVar) {
-		return node->m_keyValue.first.operandValue().value * modifier;
+		return getExpressionNode(node)->castToNumberNode()->value() * modifier;
 	} else if (rule == NodeRule::Multiplication) {
-		return node->m_left->m_keyValue.first.operandValue().value * modifier;
+		return getExpressionNode(node->m_left)->castToNumberNode()->value() * modifier;
 	} else if (rule == NodeRule::DivisionModulo) {
-		if (node->m_keyValue.first.operatorType() == OperatorType::Division) {
-			return modifier / node->m_right->m_keyValue.first.operandValue().value;
+		if (getExpressionNode(node)->castToOperatorNode()->type() == OperatorType::Division) {
+			return modifier / getExpressionNode(node->m_right)->castToNumberNode()->value();
 		}
 
-		const auto expr = ExpressionNode(modifier) % node->m_right->m_keyValue.first;
-		return expr.operandValue().value;
+		const auto& modNode = std::make_shared<NumberNode>(modifier).get();
+		const auto& rawNode = getExpressionNode(node)->castToNumberNode();
+		const auto result = modulo(modNode, rawNode)->m_keyValue.first->castToNumberNode()->value();
+		return result;
 	}
 
 	return modifier;
@@ -169,21 +172,21 @@ void EBST::mirrorNodeSign(SubtreeWithOperator& sub) {
 
 	switch (subtreeRule) {
 	case NodeRule::NumberVar: {
-		sub.subtree->m_keyValue.first = ExpressionNode(-sub.subtree->m_keyValue.first.operandValue().value);
+		sub.subtree->m_keyValue.first = std::make_shared<NumberNode>(-getExpressionNode(sub.subtree)->castToNumberNode()->value());
 		return;
 	}
 	case NodeRule::NumberAndSubtreeMul: {
 		auto& numberNode = sub.subtree->m_left;
-		const auto value = numberNode->m_keyValue.first.operandValue().value;
-		numberNode->m_keyValue.first = ExpressionNode(-value);
+		const auto value = getExpressionNode(numberNode)->castToNumberNode()->value();
+		numberNode->m_keyValue.first = std::make_shared<NumberNode>(-value);
 		return;
 	}
 	case NodeRule::NumberAndSubtreeAddSub: {
 		auto& numberNode = sub.subtree->m_left;
-		const auto value = numberNode->m_keyValue.first.operandValue().value;
-		numberNode->m_keyValue.first = ExpressionNode(-value);
-		const auto opType = sub.subtree->m_keyValue.first.operatorType();
-		sub.subtree->m_keyValue.first = ExpressionNode(switchAddSubOp(opType));
+		const auto value = getExpressionNode(numberNode)->castToNumberNode()->value();
+		numberNode->m_keyValue.first = std::make_shared<NumberNode>(-value);
+		const auto opType = getExpressionNode(sub.subtree)->castToOperatorNode()->type();
+		sub.subtree->m_keyValue.first = std::make_shared<OperatorNode>(switchAddSubOp(opType));
 		return;
 	}
 	default: break;
@@ -209,13 +212,13 @@ void EBST::mirrorNodeSignByPrevOp(NodePtr& node, OperatorType& op) {
 	default: return;
 	}
 
-	const auto value = valueNode->m_keyValue.first.operandValue().value;
+	const auto value = getExpressionNode(valueNode)->castToNumberNode()->value();
 	const auto valueOp = value >= 0 ? OperatorType::Addition : OperatorType::Substitution;
 
 	if (valueOp == OperatorType::Addition) {
 		return;
 	}
 
-	valueNode->m_keyValue.first = ExpressionNode(-value);
+	valueNode->m_keyValue.first = std::make_shared<NumberNode>(-value);
 	op = switchAddSubOp(op);
 }

@@ -1,6 +1,14 @@
 #include "NumberNode.h"
 
-namespace {
+NumberNode::NumberNode(double value) : m_value(value) {}
+
+double NumberNode::value() const {
+	return m_value;
+}
+
+std::string NumberNode::toString() const {
+	return trimDoubleToString(m_value);
+}
 
 std::string trimDoubleToString(double d) {
 	// lol
@@ -17,16 +25,4 @@ std::string trimDoubleToString(double d) {
 	}
 
 	return str;
-}
-
-} // end anonymous namespace
-
-NumberNode::NumberNode(double value) : m_value(value) {}
-
-double NumberNode::value() const {
-	return m_value;
-}
-
-std::string NumberNode::toString() const {
-	return trimDoubleToString(m_value);
 }

@@ -51,4 +51,13 @@ std::string OperatorNode::toString() const {
 	return {};
 }
 
+bool isBracket(const OperatorNode::Ptr& ex) {
+	const auto casted = ex->castToOperatorNode();
 
+	if (!casted) {
+		return false;
+	}
+
+	const auto type = casted->type();
+	return type == OperatorType::BracketLeft || type == OperatorType ::BracketRight;
+}

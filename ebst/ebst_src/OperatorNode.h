@@ -25,3 +25,5 @@ public:
 private:
 	OperatorType m_type = OperatorType::Invalid;
 };
+
+bool isBracket(const OperatorNode::Ptr& ex);

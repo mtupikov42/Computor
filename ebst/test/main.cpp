@@ -1,58 +1,71 @@
-#include "ExpressionNode.h"
 #include "EBST.h"
 #include "ExpressionException.h"
+
+#include "OperatorNode.h"
+#include "NumberNode.h"
+#include "ImaginaryNumberNode.h"
+#include "UnknownNode.h"
 
 #include <assert.h>
 #include <iostream>
 
 void operandTest() {
 	{
-		auto t = parseOperandNodeFromString("x");
-		assert(t.has_value());
-		auto tRes = t.value();
-		assert(tRes.type() == ExpressionType::Operand);
-		assert(tRes.operandValue().variableName == 'x');
-		assert(isOperandUnknown(tRes.operandValue()));
+		auto t = parseExpressionFromString("x");
+		assert(t);
+		const auto u = t->castToUnknownNode();
+		assert(u);
+		assert(u->name() == 'x');
 	}
 
 	{
-		auto t = parseOperandNodeFromString("xy");
-		assert(!t.has_value());
+		auto t = parseExpressionFromString("xy");
+		assert(!t);
 	}
 
 	{
-		auto t = parseOperandNodeFromString("3.14567");
-		assert(t.has_value());
-		auto tRes = t.value();
-		assert(tRes.operandValue().value == 3.14567);
+		auto t = parseExpressionFromString("3.14567");
+		assert(t);
+		const auto u = t->castToNumberNode();
+		assert(u);
+		auto tRes = u->value();
+		assert(tRes == 3.14567);
 	}
 
 	{
-		auto t = parseOperandNodeFromString("4.");
-		assert(t.has_value());
-		auto tRes = t.value();
-		assert(tRes.operandValue().value == 4.);
+		auto t = parseExpressionFromString("4.");
+		assert(t);
+		const auto u = t->castToNumberNode();
+		assert(u);
+		auto tRes = u->value();
+		assert(tRes == 4.);
 	}
 
 	{
-		auto t = parseOperandNodeFromString("+24434312");
-		assert(t.has_value());
-		auto tRes = t.value();
-		assert(tRes.operandValue().value == 24434312);
+		auto t = parseExpressionFromString("+24434312");
+		assert(t);
+		const auto u = t->castToNumberNode();
+		assert(u);
+		auto tRes = u->value();
+		assert(tRes == 24434312);
 	}
 
 	{
-		auto t = parseOperandNodeFromString("-100500");
-		assert(t.has_value());
-		auto tRes = t.value();
-		assert(tRes.operandValue().value == -100500);
+		auto t = parseExpressionFromString("-100500");
+		assert(t);
+		const auto u = t->castToNumberNode();
+		assert(u);
+		auto tRes = u->value();
+		assert(tRes == -100500);
 	}
 
 	{
-		auto t = parseOperandNodeFromString("-24434312.49328409234932");
-		assert(t.has_value());
-		auto tRes = t.value();
-		assert(tRes.operandValue().value == -24434312.49328409234932);
+		auto t = parseExpressionFromString("-24434312.49328409234932");
+		assert(t);
+		const auto u = t->castToNumberNode();
+		assert(u);
+		auto tRes = u->value();
+		assert(tRes == -24434312.49328409234932);
 	}
 
 	std::cout << "Operands OK" << std::endl;
@@ -60,16 +73,16 @@ void operandTest() {
 
 void operatorTest() {
 	{
-		auto o = parseOperatorNodeFromChar('a');
-		assert(!o.has_value());
+		auto o = parseExpressionFromChar('a');
+		assert(!o);
 	}
 
 	{
-		auto o = parseOperatorNodeFromChar('+');
-		assert(o.has_value());
-		auto oRes = o.value();
-		assert(oRes.type() == ExpressionType::Operator);
-		assert(oRes.operatorType() == OperatorType::Addition);
+		auto o = parseExpressionFromChar('+');
+		assert(o);
+		const auto u = o->castToOperatorNode();
+		assert(u);
+		assert(u->type() == OperatorType::Addition);
 	}
 
 	std::cout << "Operators OK" << std::endl;
@@ -91,9 +104,9 @@ void ebstTest() {
 		auto res1 = result[0];
 		auto res2 = result[1];
 		assert(res1.varName == "x1");
-		assert(res1.varResult == trimToStringDouble(0.0));
+		assert(res1.varResult == trimDoubleToString(0.0));
 		assert(res2.varName == "x2");
-		assert(res2.varResult == trimToStringDouble(100.0));
+		assert(res2.varResult == trimDoubleToString(100.0));
 	} catch (const ExpressionException& ex) {
 		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
 		assert(false);
@@ -137,9 +150,9 @@ void ebstTest() {
 		auto res1 = result[0];
 		auto res2 = result[1];
 		assert(res1.varName == "x1");
-		assert(res1.varResult == trimToStringDouble(-2584.860315));
+		assert(res1.varResult == trimDoubleToString(-2584.860315));
 		assert(res2.varName == "x2");
-		assert(res2.varResult == trimToStringDouble(2584.850315));
+		assert(res2.varResult == trimDoubleToString(2584.850315));
 	} catch (const ExpressionException& ex) {
 		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
 		assert(false);
@@ -160,9 +173,9 @@ void ebstTest() {
 		auto res1 = result[0];
 		auto res2 = result[1];
 		assert(res1.varName == "x1");
-		assert(res1.varResult == trimToStringDouble(1.123212));
+		assert(res1.varResult == trimDoubleToString(1.123212));
 		assert(res2.varName == "x2");
-		assert(res2.varResult == trimToStringDouble(-0.623212));
+		assert(res2.varResult == trimDoubleToString(-0.623212));
 	} catch (const ExpressionException& ex) {
 		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
 		assert(false);
@@ -192,7 +205,7 @@ void ebstTest() {
 
 		auto res = result[0];
 		assert(res.varName == "x");
-		assert(res.varResult == trimToStringDouble(0.0));
+		assert(res.varResult == trimDoubleToString(0.0));
 	} catch (const ExpressionException& ex) {
 		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
 		assert(false);
@@ -213,9 +226,9 @@ void ebstTest() {
 		auto res1 = result[0];
 		auto res2 = result[1];
 		assert(res1.varName == "x1");
-		assert(res1.varResult == trimToStringDouble(-6.877055));
+		assert(res1.varResult == trimDoubleToString(-6.877055));
 		assert(res2.varName == "x2");
-		assert(res2.varResult == trimToStringDouble(0.727055));
+		assert(res2.varResult == trimDoubleToString(0.727055));
 	} catch (const ExpressionException& ex) {
 		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
 		assert(false);
@@ -236,9 +249,9 @@ void ebstTest() {
 		auto res1 = result[0];
 		auto res2 = result[1];
 		assert(res1.varName == "x1");
-		assert(res1.varResult == trimToStringDouble(0.905239));
+		assert(res1.varResult == trimDoubleToString(0.905239));
 		assert(res2.varName == "x2");
-		assert(res2.varResult == trimToStringDouble(-0.475131));
+		assert(res2.varResult == trimDoubleToString(-0.475131));
 	} catch (const ExpressionException& ex) {
 		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
 		assert(false);
@@ -259,9 +272,9 @@ void ebstTest() {
 		auto res1 = result[0];
 		auto res2 = result[1];
 		assert(res1.varName == "x1");
-		assert(res1.varResult == trimToStringDouble(1.0));
+		assert(res1.varResult == trimDoubleToString(1.0));
 		assert(res2.varName == "x2");
-		assert(res2.varResult == trimToStringDouble(0.0));
+		assert(res2.varResult == trimDoubleToString(0.0));
 	} catch (const ExpressionException& ex) {
 		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
 		assert(false);
@@ -281,7 +294,7 @@ void ebstTest() {
 
 		auto res = result.front();
 		assert(res.varName == "x");
-		assert(res.varResult == trimToStringDouble(-0.25));
+		assert(res.varResult == trimDoubleToString(-0.25));
 	} catch (const ExpressionException& ex) {
 		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
 		assert(false);
@@ -301,7 +314,7 @@ void ebstTest() {
 
 		auto res = result.front();
 		assert(res.varName == "x");
-		assert(res.varResult == trimToStringDouble(-5.0 / 4.0));
+		assert(res.varResult == trimDoubleToString(-5.0 / 4.0));
 	} catch (const ExpressionException& ex) {
 		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
 		assert(false);
@@ -322,11 +335,11 @@ void ebstTest() {
 		auto res2 = result[1];
 		auto res3 = result[2];
 		assert(res1.varName == "x1");
-		assert(res1.varResult == trimToStringDouble(1.932575));
+		assert(res1.varResult == trimDoubleToString(1.932575));
 		assert(res2.varName == "x2");
-		assert(res2.varResult == trimToStringDouble(-2.893387));
+		assert(res2.varResult == trimDoubleToString(-2.893387));
 		assert(res3.varName == "x3");
-		assert(res3.varResult == trimToStringDouble(0.493055));
+		assert(res3.varResult == trimDoubleToString(0.493055));
 	} catch (const ExpressionException& ex) {
 		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
 		assert(false);
@@ -356,7 +369,7 @@ void ebstTest() {
 		assert(disc.value() == 49);
 
 		assert(res.varName == "x");
-		assert(res.varResult == trimToStringDouble(1.0 / 7.0));
+		assert(res.varResult == trimDoubleToString(1.0 / 7.0));
 	} catch (const ExpressionException& ex) {
 		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
 		assert(false);
@@ -377,9 +390,9 @@ void ebstTest() {
 		auto res1 = result[0];
 		auto res2 = result[1];
 		assert(res1.varName == "x1");
-		assert(res1.varResult == trimToStringDouble(-3.632993));
+		assert(res1.varResult == trimDoubleToString(-3.632993));
 		assert(res2.varName == "x2");
-		assert(res2.varResult == trimToStringDouble(-0.367007));
+		assert(res2.varResult == trimDoubleToString(-0.367007));
 	} catch (const ExpressionException& ex) {
 		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
 		assert(false);
@@ -399,7 +412,7 @@ void ebstTest() {
 
 		auto res = result[0];
 		assert(res.varName == "x");
-		assert(res.varResult == trimToStringDouble(-1.0));
+		assert(res.varResult == trimDoubleToString(-1.0));
 	} catch (const ExpressionException& ex) {
 		std::cout << ex.toString() << "; column: " << ex.column() << std::endl;
 		assert(false);

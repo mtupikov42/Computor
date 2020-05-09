@@ -22,10 +22,10 @@ EBST::NodePtr EBST::reduceNode(const NodePtr &parent) const {
 		auto leftExp = getExpressionNode(newNode->m_left);
 		auto rightExp = getExpressionNode(newNode->m_right);
 
-		const auto leftExprIsOperator = isOperator(leftExp);
-		const auto leftExprIsUnknownOperand = !leftExprIsOperator && isOperandUnknown(leftExp.operandValue());
-		const auto rightExprIsOperator = isOperator(rightExp);
-		const auto rightExprIsUnknownOperand = !rightExprIsOperator && isOperandUnknown(rightExp.operandValue());
+		const bool leftExprIsOperator = leftExp->castToOperatorNode();
+		const bool leftExprIsUnknownOperand = !leftExprIsOperator && leftExp->castToUnknownNode();
+		const bool rightExprIsOperator = rightExp->castToOperatorNode();
+		const bool rightExprIsUnknownOperand = !rightExprIsOperator && rightExp->castToUnknownNode();
 
 		const auto onlyNumbers = !leftExprIsOperator && !leftExprIsUnknownOperand
 		                         && !rightExprIsOperator && !rightExprIsUnknownOperand;

@@ -1,11 +1,17 @@
 #pragma once
 
-#include "ExpressionNode.h"
-
-#include <AbstractBST.h>
 #include <vector>
 #include <exception>
 #include <complex>
+#include <optional>
+#include <map>
+
+#include <AbstractBST.h>
+
+#include "OperatorNode.h"
+#include "NumberNode.h"
+#include "ImaginaryNumberNode.h"
+#include "UnknownNode.h"
 
 struct ExpressionResult {
 	std::string varName;
@@ -17,9 +23,9 @@ struct ExpressionSolution {
 	std::optional<double> discriminant;
 };
 
-class EBST final : public AbstractBST<ExpressionNode, bool> {
+class EBST final : public AbstractBST<AbstractExpressionNode::Ptr, bool> {
 public:
-	using AbstractBaseTree = AbstractBST<ExpressionNode, bool>;
+	using AbstractBaseTree = AbstractBST<AbstractExpressionNode::Ptr, bool>;
 	using AbstractBaseTree::find;
 
 	enum class OutputType {
@@ -87,9 +93,17 @@ private:
 	friend NodeRule operator|(NodeRule a, NodeRule b);
 	std::string toString(const NodeRule rule) const;
 
-	std::vector<ExpressionNode> parseExpression(const std::string& expressionString, int preExprLength = 0);
+	std::vector<AbstractExpressionNode::Ptr> parseExpression(const std::string& expressionString, int preExprLength = 0);
 
-	NodePtr buildTree(const std::vector<ExpressionNode>& expressionString);
+	NodePtr buildTree(const std::vector<AbstractExpressionNode::Ptr>& expressionString);
+
+	// NodeMath.cpp
+	NodePtr add(const NumberNode* n1, const NumberNode* n2) const;
+	NodePtr subtract(const NumberNode* n1, const NumberNode* n2) const;
+	NodePtr divide(const NumberNode* n1, const NumberNode* n2) const;
+	NodePtr modulo(const NumberNode* n1, const NumberNode* n2) const;
+	NodePtr multiply(const NumberNode* n1, const NumberNode* n2) const;
+	NodePtr power(const NumberNode* n1, const NumberNode* n2) const;
 
 	// NodeReduce.cpp
 	NodePtr buildReducedFormTree(const NodePtr& node);
@@ -133,8 +147,8 @@ private:
 	NodePtr simplifyMultiplication(NodePtr& node) const;
 	NodePtr simplifyDivision(NodePtr& node) const;
 	NodePtr simplifyPower(NodePtr& node) const;
-	NodePtr simplifyTwoNumbers(const NodePtr& node, const ExpressionNode& leftExp, const ExpressionNode& rightExp) const;
-	NodePtr simplifyOperatorAndNumber(NodePtr& node, const ExpressionNode& op, bool leftIsOp) const;
+	NodePtr simplifyTwoNumbers(const NodePtr& node, const AbstractExpressionNode::Ptr& leftExp, const AbstractExpressionNode::Ptr& rightExp) const;
+	NodePtr simplifyOperatorAndNumber(NodePtr& node, const AbstractExpressionNode::Ptr& op, bool leftIsOp) const;
 	NodePtr simplifySubTreeWithUnknowns(const NodePtr& ptr) const;
 	void switchLeftRightIfNumberOnRight(const NodePtr& ptr) const;
 
@@ -152,9 +166,9 @@ private:
 	NodeRule validateRules(NodeRule rule1, NodeRule rule2, NodeRule rule3) const;
 
 	// NodeHelpers.cpp
-	NodePtr allocateNode(const ExpressionNode& node) const;
+	static NodePtr allocateNode(const AbstractExpressionNode::Ptr& node);
 	NodePtr createNodeByDegreeAndValue(double value, int degree) const;
-	ExpressionNode getExpressionNode(const NodePtr& ptr) const;
+	AbstractExpressionNode::Ptr getExpressionNode(const NodePtr& ptr) const;
 	bool subTreesAreEqual(const NodePtr& n1, const NodePtr& n2) const;
 	bool nodeHasUnknownExpr(const NodePtr& ptr) const;
 	int getMaximumPowerOfSubtree(const NodePtr& node) const;
@@ -181,14 +195,14 @@ private:
 	int m_maxDegree = 0;
 	bool m_isBalanced = false;
 	bool m_containsEqualSign = false;
-	std::string m_unknownOperandName = {invalidOperandVarName};
+	std::string m_unknownOperandName = { invalidUnknownNodeName };
 
 	// unused stuff
-    void insert(const ExpressionNode& key, const bool&) override;
+	void insert(const AbstractExpressionNode::Ptr& key, const bool&) override;
     NodePtr insert(NodePtr& node, const typename AbstractBaseTree::KVPair& keyValue) override;
-    bool remove(const ExpressionNode& key) override;
-	NodePtr remove(NodePtr &p, const ExpressionNode &key) override;
-	NodePtr find(const NodePtr& node, const ExpressionNode& key) const override;
-	iterator find(const ExpressionNode& key) const override;
+	bool remove(const AbstractExpressionNode::Ptr& key) override;
+	NodePtr remove(NodePtr &p, const AbstractExpressionNode::Ptr &key) override;
+	NodePtr find(const NodePtr& node, const AbstractExpressionNode::Ptr& key) const override;
+	iterator find(const AbstractExpressionNode::Ptr& key) const override;
 	iterator begin() const override;
 };

@@ -4,7 +4,7 @@ std::string EBST::outputInfix(const NodePtr& ptr, bool withBrackets) const {
 	std::string result;
 
 	if (ptr) {
-		auto typeIsOperator = ptr->m_keyValue.first.type() == ExpressionType::Operator;
+		const bool typeIsOperator = ptr->m_keyValue.first->castToOperatorNode();
 
 		if (withBrackets && typeIsOperator) {
 			result += '(';
@@ -14,7 +14,7 @@ std::string EBST::outputInfix(const NodePtr& ptr, bool withBrackets) const {
 		if (typeIsOperator) {
 			result += ' ';
 		}
-		result += ptr->m_keyValue.first.toString();
+		result += ptr->m_keyValue.first->toString();
 		if (typeIsOperator) {
 			result += ' ';
 		}
@@ -34,7 +34,7 @@ std::string EBST::outputPostfix(const EBST::NodePtr &ptr) const {
 	if (ptr) {
 		result += outputPostfix(ptr->m_left);
 		result += outputPostfix(ptr->m_right);
-		result += ptr->m_keyValue.first.toString();
+		result += ptr->m_keyValue.first->toString();
 		result += ' ';
 	}
 
@@ -45,7 +45,7 @@ std::string EBST::outputPrefix(const EBST::NodePtr &ptr) const {
 	std::string result;
 
 	if (ptr) {
-		result += ptr->m_keyValue.first.toString();
+		result += ptr->m_keyValue.first->toString();
 		result += ' ';
 		result += outputPrefix(ptr->m_left);
 		result += outputPrefix(ptr->m_right);

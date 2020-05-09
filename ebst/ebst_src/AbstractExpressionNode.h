@@ -14,10 +14,10 @@ public:
 
 	virtual ~AbstractExpressionNode() = default;
 
-	static NumberNode* castToNumberNode(AbstractExpressionNode*);
-	static ImaginaryNumberNode* castToImaginaryNumberNode(AbstractExpressionNode*);
-	static UnknownNode* castToUnknownNode(AbstractExpressionNode*);
-	static OperatorNode* castToOperatorNode(AbstractExpressionNode*);
+	NumberNode* castToNumberNode();
+	UnknownNode* castToUnknownNode();
+	OperatorNode* castToOperatorNode();
+	ImaginaryNumberNode* castToImaginaryNumberNode();
 
 	virtual std::string toString() const = 0;
 };
