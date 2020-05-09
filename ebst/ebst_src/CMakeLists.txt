@@ -12,8 +12,19 @@ add_library(ebst STATIC
 	ExpressionException.h
 	ExpressionException.cpp
 
-	ExpressionNode.h
-	ExpressionNode.cpp
+	ExpressionNode.h #remove
+	ExpressionNode.cpp #remove
+
+	AbstractExpressionNode.h
+	AbstractExpressionNode.cpp
+	NumberNode.h
+	NumberNode.cpp
+	ImaginaryNumberNode.h
+	ImaginaryNumberNode.cpp
+	OperatorNode.h
+	OperatorNode.cpp
+	UnknownNode.h
+	UnknownNode.cpp
 )
 
 target_link_libraries(ebst PUBLIC abst)
