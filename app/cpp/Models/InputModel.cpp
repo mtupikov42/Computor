@@ -35,6 +35,12 @@ void InputModel::deductInput(const QString& input) {
 
 	if (varAssMatch.hasMatch()) {
 		const auto varName = varAssMatch.captured(1).toLower();
+
+		if (!nameIsUnique(m_funcList->validFunctionsNames(), varName)) {
+			emit errorOccured(tr("Variable cannot be named as existing function"));
+			return;
+		}
+
 		const auto resInput = varAssMatch.captured(2).toLower();
 		const auto replacedInput = replaceVariablesWithValues(resInput);
 		emit variableInserted(varName, replacedInput);
@@ -44,6 +50,12 @@ void InputModel::deductInput(const QString& input) {
 		tryToResolve(resInput);
 	} else if (funcMatch.hasMatch()) {
 		const auto funcName = funcMatch.captured(1).toLower();
+
+		if (!nameIsUnique(m_varList->validVariablesList().keys(), funcName)) {
+			emit errorOccured(tr("Function cannot be named as existing variable"));
+			return;
+		}
+
 		const auto varNameStr = funcMatch.captured(2).toLower();
 
 		if (varNameStr.length() != 1) {
@@ -100,7 +112,7 @@ void InputModel::tryToResolve(const QString& input) {
 }
 
 QString InputModel::replaceVariablesWithValues(const QString& input, const QStringList& except) {
-	const auto variableMap= m_varList->validVariablesList();
+	const auto variableMap = m_varList->validVariablesList();
 
 	QString resInput = input;
 	for (const auto& var : variableMap.keys()) {
@@ -112,4 +124,14 @@ QString InputModel::replaceVariablesWithValues(const QString& input, const QStri
 	}
 
 	return resInput;
+}
+
+bool InputModel::nameIsUnique(const QStringList& names, const QString& checkName) {
+	for (const auto& name : names) {
+		if (checkName == name) {
+			return false;
+		}
+	}
+
+	return true;
 }

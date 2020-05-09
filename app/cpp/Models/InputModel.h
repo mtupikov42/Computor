@@ -32,6 +32,7 @@ private:
 	void deductInput(const QString& input);
 	void tryToResolve(const QString& input);
 	QString replaceVariablesWithValues(const QString& input, const QStringList& except = {});
+	bool nameIsUnique(const QStringList& names, const QString& name);
 
 	QPointer<FunctionList> m_funcList;
 	QPointer<VariableList> m_varList;

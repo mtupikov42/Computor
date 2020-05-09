@@ -31,8 +31,8 @@ Rectangle {
         target: InputModel
 
         onErrorOccured: {
-            inputField.tooltip.text = error
-            inputField.tooltip.visible = true
+            inputField.textField.tooltip.text = error
+            inputField.textField.tooltip.visible = true
         }
 
         onExpressionInserted: {
@@ -90,7 +90,6 @@ Rectangle {
                 textField.placeholderText: qsTr("Please enter function / variable / matrix..")
                 textField.tooltip.visible: false
                 textField.tooltip.color: QmlColorPalette.generic.error
-                textField.tooltip.placement: Theme.Right
             }
         }
 
