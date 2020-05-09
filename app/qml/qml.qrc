@@ -40,6 +40,7 @@
 		<file>Controls/CToolTipBackground.qml</file>
 		<file>Controls/CWindowHeaderButton.qml</file>
 		<file>Controls/WindowHeader.qml</file>
+		<file>Items/ExamplesListView.qml</file>
 		<file>Items/ExpressionDelegate.qml</file>
 		<file>Items/ExpressionsListView.qml</file>
 		<file>Items/FunctionDelegate.qml</file>
@@ -47,6 +48,7 @@
 		<file>Items/HistoryListView.qml</file>
 		<file>Items/VariableDelegate.qml</file>
 		<file>Items/VariableListView.qml</file>
+		<file>Widgets/ComputorExamples.qml</file>
 		<file>Widgets/CustomWindowAreaWidget.qml</file>
 		<file>Widgets/WidgetComputorHistoryArea.qml</file>
 		<file>Widgets/WidgetMain.qml</file>

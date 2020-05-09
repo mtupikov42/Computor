@@ -49,15 +49,20 @@ Rectangle {
     }
 
     RowLayout {
+        id: mainRow
+
         anchors {
             top: parent.top
             bottom: parent.bottom
             left: parent.left
-            margins: SizeProvider.metric(5)
+            right: parent.right
+            margins: layoutMargin
         }
 
+        readonly property real layoutMargin: SizeProvider.metric(5)
+
         ColumnLayout {
-            Layout.preferredWidth: SizeProvider.metric(500)
+            Layout.preferredWidth: parent.width - examples.width - mainRow.layoutMargin
 
             spacing: SizeProvider.metric(10)
 
@@ -65,7 +70,8 @@ Rectangle {
                 id: historyArea
 
                 Layout.fillHeight: true
-                Layout.fillWidth: true
+
+                implicitWidth: parent.width
 
                 onContentCopied: inputField.text = content
             }
@@ -73,8 +79,7 @@ Rectangle {
             CTextFieldWithHistory {
                 id: inputField
 
-                Layout.fillWidth: true
-
+                implicitWidth: parent.width
                 historyModel: InputHistoryList
                 inputModel: InputModel
                 textField.placeholderText: qsTr("Please enter function / variable / matrix..")
@@ -82,6 +87,14 @@ Rectangle {
                 textField.tooltip.color: QmlColorPalette.generic.error
                 textField.tooltip.placement: Theme.Right
             }
+        }
+
+        ComputorExamples {
+            id: examples
+
+            Layout.alignment: Qt.AlignTop | Qt.AlignRight
+
+            onExampleCopied: inputField.textField.text = example
         }
     }
 }

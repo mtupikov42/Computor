@@ -40,6 +40,7 @@ set(qml
 	Controls/CWindowHeaderButton.qml
 	Controls/WindowHeader.qml
 
+	Items/ExamplesListView.qml
 	Items/ExpressionDelegate.qml
 	Items/ExpressionsListView.qml
 	Items/FunctionDelegate.qml
@@ -48,6 +49,7 @@ set(qml
 	Items/VariableDelegate.qml
 	Items/VariableListView.qml
 
+	Widgets/ComputorExamples.qml
 	Widgets/CustomWindowAreaWidget.qml
 	Widgets/WidgetComputorHistoryArea.qml
 	Widgets/WidgetMain.qml

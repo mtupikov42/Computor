@@ -10,6 +10,10 @@ Item {
 
     property alias model: historyView.model
     property alias delegate: historyView.delegate
+    property alias spacing: historyView.spacing
+    property alias currentIndex: historyView.currentIndex
+    property alias count: historyView.count
+    property alias verticalScrollBar: scrollBar
 
     ListView {
         id: historyView
@@ -21,6 +25,8 @@ Item {
         keyNavigationWraps: true
         spacing: SizeProvider.metric(10)
         ScrollBar.vertical: CScrollBar {
+            id: scrollBar
+
             policy: (historyView.contentHeight > historyView.height) ? ScrollBar.AsNeeded : ScrollBar.AlwaysOff
         }
 
