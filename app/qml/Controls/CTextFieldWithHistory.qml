@@ -17,6 +17,10 @@ Item {
     property var inputModel: null // InputModel C++
     property int historyPlacement: Theme.Top // only Top or Bottom
 
+    function gainTextFieldFocus() {
+        textField.forceActiveFocus()
+    }
+
     Rectangle {
         id: historyArea
 

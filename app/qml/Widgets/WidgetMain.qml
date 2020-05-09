@@ -73,11 +73,16 @@ Rectangle {
 
                 implicitWidth: parent.width
 
-                onContentCopied: inputField.text = content
+                onContentCopied: inputField.pasteTextAndGainFocus(content)
             }
 
             CTextFieldWithHistory {
                 id: inputField
+
+                function pasteTextAndGainFocus(toPaste) {
+                    inputField.textField.text = toPaste
+                    inputField.gainTextFieldFocus()
+                }
 
                 implicitWidth: parent.width
                 historyModel: InputHistoryList
@@ -94,7 +99,7 @@ Rectangle {
 
             Layout.alignment: Qt.AlignTop | Qt.AlignRight
 
-            onExampleCopied: inputField.textField.text = example
+            onExampleCopied: inputField.pasteTextAndGainFocus(example)
         }
     }
 }
