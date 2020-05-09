@@ -72,7 +72,7 @@ Item {
                     id: copyErrorIcon
 
                     text: SpecialSymbols.faClone
-                    tooltip.text: qsTr("Copy expression")
+                    tooltip.text: qsTr("Copy variable")
 
                     onPressed: root.variableCopied(errorText.text)
                 }
@@ -145,7 +145,7 @@ Item {
                     Layout.alignment: Qt.AlignRight
 
                     text: SpecialSymbols.faClone
-                    tooltip.text: qsTr("Copy expression")
+                    tooltip.text: qsTr("Copy variable")
 
                     onPressed: root.variableCopied(resultText.text)
                 }
