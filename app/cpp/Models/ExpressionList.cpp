@@ -1,6 +1,7 @@
 #include "ExpressionList.h"
 
 #include <QLoggingCategory>
+#include <QUrl>
 
 namespace L {
 Q_LOGGING_CATEGORY(expression_list, "app.expression.list", QtInfoMsg);
@@ -26,6 +27,7 @@ QVariant ExpressionList::data(const QModelIndex& index, int role) const {
 	case Role::PostfixString: return d->toString(ExpressionModel::OutputType::Postfix);
 	case Role::PrefixString: return d->toString(ExpressionModel::OutputType::Prefix);
 	case Role::ErrorString: return d->errorString();
+	case Role::WolframUrl: return "https://www.wolframalpha.com/input/?i=" + QUrl::toPercentEncoding(d->rawExpression());
 	default:
 		qFatal("unhandled role");
 		break;
@@ -52,7 +54,8 @@ QHash<int, QByteArray> ExpressionList::roleNames() const {
 		{ Role::InfixWithParenthesesString, "infixWithParenthesesStringRole" },
 		{ Role::PostfixString, "postfixStringRole" },
 		{ Role::PrefixString, "prefixStringRole" },
-		{ Role::ErrorString, "errorStringRole" }
+		{ Role::ErrorString, "errorStringRole" },
+		{ Role::WolframUrl, "wolframUrlRole" }
 	};
 
 	return role_names;

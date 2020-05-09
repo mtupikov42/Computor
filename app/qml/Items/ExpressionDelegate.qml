@@ -6,6 +6,7 @@ import "../Controls"
 import SizeProvider 1.0
 import SpecialSymbols 1.0
 import ComputorQmlPlugin 1.0
+import QmlColorPalette 1.0
 
 Item {
     id: root
@@ -21,6 +22,7 @@ Item {
     property string postfixString
     property string prefixString
     property string errorString
+    property string wolframUrl
 
     readonly property Loader currentLoader: errorState ? errorLoader : normalLoader
     readonly property bool errorState: errorColumn >= 0
@@ -131,6 +133,18 @@ Item {
                     delegate: CText {
                         visible: !root.showMinimalInfo
                         text: modelData
+                    }
+                }
+
+                CText {
+                    id: wolframUrl
+
+                    linkColor: QmlColorPalette.generic.accent
+                    textFormat: Text.StyledText
+                    text: "<a href='" + root.wolframUrl + "'>Check on WolframAlpha</a>"
+
+                    onLinkActivated: {
+                        Qt.openUrlExternally(link)
                     }
                 }
             }

@@ -26,6 +26,9 @@ Item {
     property alias textFormat: internalText.textFormat
     property alias textRotation: internalText.rotation
     property alias isTruncated: internalText.truncated
+    property alias linkColor: internalText.linkColor
+
+    signal linkActivated(url link)
 
     Text {
         id: internalText
@@ -38,5 +41,9 @@ Item {
         textFormat: Text.PlainText
         verticalAlignment: Text.AlignVCenter
         horizontalAlignment: Text.AlignHCenter
+
+        onLinkActivated: {
+            root.linkActivated(link)
+        }
     }
 }

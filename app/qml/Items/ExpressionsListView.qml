@@ -30,6 +30,7 @@ HistoryListView {
                 postfixString: postfixStringRole
                 prefixString: prefixStringRole
                 errorString: errorStringRole
+                wolframUrl: wolframUrlRole
 
                 onExpressionCopied: root.expressionCopied(expression)
                 onRequestRemove: root.model.remove(index)

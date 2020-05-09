@@ -17,7 +17,8 @@ public:
 		InfixWithParenthesesString,
 		PostfixString,
 		PrefixString,
-		ErrorString
+		ErrorString,
+		WolframUrl
 	};
 	Q_ENUM(Role)
 
