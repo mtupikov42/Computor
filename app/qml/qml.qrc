@@ -45,6 +45,8 @@
 		<file>Items/FunctionDelegate.qml</file>
 		<file>Items/FunctionsListView.qml</file>
 		<file>Items/HistoryListView.qml</file>
+		<file>Items/VariableDelegate.qml</file>
+		<file>Items/VariableListView.qml</file>
 		<file>Widgets/CustomWindowAreaWidget.qml</file>
 		<file>Widgets/WidgetComputorHistoryArea.qml</file>
 		<file>Widgets/WidgetMain.qml</file>

@@ -42,6 +42,10 @@ Rectangle {
         onFunctionInserted: {
             historyArea.selectFunctions()
         }
+
+        onNumberVariableInserted: {
+            historyArea.selectVariables()
+        }
     }
 
     RowLayout {

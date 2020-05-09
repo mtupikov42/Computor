@@ -4,6 +4,7 @@
 
 #include "Models/ExpressionModel.h"
 #include "Models/FunctionModel.h"
+#include "Models/VariableModel.h"
 
 class ComputorCreateController final : public QObject {
 	Q_OBJECT
@@ -18,8 +19,14 @@ public slots:
 	    const QString& expression,
 	    char expressionUnknown
 	);
+	void createNumberVariable(
+	    const QString& varName,
+	    const QString& realPart,
+	    const QString& imagPart
+	);
 
 signals:
 	void expressionModelCreated(const ExpressionModel::Ptr& model);
 	void functionModelCreated(const FunctionModel::Ptr& model);
+	void variableModelCreated(const VariableModel::Ptr& model);
 };

@@ -17,3 +17,13 @@ void ComputorCreateController::createFunction(
 
 	emit functionModelCreated(model);
 }
+
+void ComputorCreateController::createNumberVariable(
+    const QString& varName,
+    const QString& realPart,
+    const QString& imagPart
+) {
+	auto model = QSharedPointer<VariableModel>::create(varName, realPart, imagPart);
+
+	emit variableModelCreated(model);
+}

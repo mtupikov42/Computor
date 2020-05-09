@@ -5,6 +5,8 @@ set(source
 	FunctionModel.cpp
 	InputHistoryList.cpp
 	InputModel.cpp
+	VariableList.cpp
+	VariableModel.cpp
 )
 
 set(headers
@@ -14,6 +16,8 @@ set(headers
 	FunctionModel.h
 	InputHistoryList.h
 	InputModel.h
+	VariableList.h
+	VariableModel.h
 )
 
 add_subdir()

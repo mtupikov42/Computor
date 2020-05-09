@@ -22,6 +22,10 @@ Item {
         computorBar.currentIndex = 1
     }
 
+    function selectVariables() {
+        computorBar.currentIndex = 2
+    }
+
     CTabBar {
         id: computorBar
 
@@ -38,6 +42,10 @@ Item {
 
         CTabButton {
             text: qsTr("Functions")
+        }
+
+        CTabButton {
+            text: qsTr("Variables")
         }
     }
 
@@ -76,6 +84,14 @@ Item {
                 model: FunctionList
 
                 onFunctionCopied: root.contentCopied(func)
+            }
+
+            VariableListView {
+                id: variableList
+
+                model: VariableList
+
+                onVariableCopied: root.contentCopied(variable)
             }
         }
     }

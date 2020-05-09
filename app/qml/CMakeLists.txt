@@ -45,6 +45,8 @@ set(qml
 	Items/FunctionDelegate.qml
 	Items/FunctionsListView.qml
 	Items/HistoryListView.qml
+	Items/VariableDelegate.qml
+	Items/VariableListView.qml
 
 	Widgets/CustomWindowAreaWidget.qml
 	Widgets/WidgetComputorHistoryArea.qml
