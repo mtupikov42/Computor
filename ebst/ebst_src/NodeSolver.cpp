@@ -10,8 +10,8 @@ std::string complexToString(const std::complex<double>& c) {
 	const auto realNum = c.real();
 	const auto imagNum = c.imag();
 
-	const auto realStr = trimToStringDouble(realNum);
-	const auto imagStr = trimToStringDouble(imagNum);
+	const auto realStr = trimDoubleToString(realNum);
+	const auto imagStr = trimDoubleToString(imagNum);
 
 	const auto optPlus = imagNum >= 0.0 ? "+" : "";
 
@@ -54,7 +54,7 @@ void EBST::solveNumber() {
 	const auto& vec = m_degreeSubtrees[0];
 	assert(vec.size() == 1);
 
-	if (vec.front().subtree->m_keyValue.first.operandValue().value != 0.0) {
+	if (getExpressionNode(vec.front().subtree)->castToNumberNode()->value() != 0.0) {
 		throw ExpressionException(ExpressionError::Unsolvable, 0);
 	}
 }
@@ -72,7 +72,7 @@ void EBST::solveLinear() {
 	const auto d = discriminant(0.0, b ,c);
 
 	m_solution.discriminant.emplace(d);
-	m_solution.solutions.push_back({ {m_unknownOperandName}, trimToStringDouble(solve(b, c)) });
+	m_solution.solutions.push_back({ {m_unknownOperandName}, trimDoubleToString(solve(b, c)) });
 }
 
 void EBST::solveQuadratic() {
@@ -103,7 +103,7 @@ void EBST::solveQuadratic() {
 		const auto sqrtD = countSqrtOfDiscriminant(d);
 
 		const auto numRes = (-b + sqrtD.real()) / (2 * a);
-		ExpressionResult res{ m_unknownOperandName, trimToStringDouble(numRes) };
+		ExpressionResult res{ m_unknownOperandName, trimDoubleToString(numRes) };
 
 		return { res };
 	};
@@ -113,8 +113,8 @@ void EBST::solveQuadratic() {
 
 		const auto num1Res = (-b - sqrtD.real()) / (2.0 * a);
 		const auto num2Res = (-b + sqrtD.real()) / (2.0 * a);
-		ExpressionResult res1{ m_unknownOperandName + "1", trimToStringDouble(num1Res) };
-		ExpressionResult res2{ m_unknownOperandName + "2", trimToStringDouble(num2Res) };
+		ExpressionResult res1{ m_unknownOperandName + "1", trimDoubleToString(num1Res) };
+		ExpressionResult res2{ m_unknownOperandName + "2", trimDoubleToString(num2Res) };
 
 		return { res1, res2 };
 	};
@@ -142,8 +142,8 @@ void EBST::solveCubic() {
 		const auto r13 = r < 0 ? -std::cbrt(-r) : std::cbrt(r);
 		const auto resNum1 = -t1 + 2.0 * r13;
 		const auto resNum2 = -(r13 + t1);
-		ExpressionResult res1{ m_unknownOperandName + "1", trimToStringDouble(resNum1) };
-		ExpressionResult res2{ m_unknownOperandName + "2", trimToStringDouble(resNum2) };
+		ExpressionResult res1{ m_unknownOperandName + "1", trimDoubleToString(resNum1) };
+		ExpressionResult res2{ m_unknownOperandName + "2", trimDoubleToString(resNum2) };
 
 		return { res1, res2 };
 	};
@@ -157,9 +157,9 @@ void EBST::solveCubic() {
 		const auto x2 = -t1 + r13 * std::cos((d1 + 2.0 * pi) / 3.0);
 		const auto x3 = -t1 + r13 * std::cos((d1 + 4.0 * pi) / 3.0);
 
-		ExpressionResult res1{ m_unknownOperandName + "1", trimToStringDouble(x1) };
-		ExpressionResult res2{ m_unknownOperandName + "2", trimToStringDouble(x2) };
-		ExpressionResult res3{ m_unknownOperandName + "3", trimToStringDouble(x3) };
+		ExpressionResult res1{ m_unknownOperandName + "1", trimDoubleToString(x1) };
+		ExpressionResult res2{ m_unknownOperandName + "2", trimDoubleToString(x2) };
+		ExpressionResult res3{ m_unknownOperandName + "3", trimDoubleToString(x3) };
 
 		return { res1, res2, res3 };
 	};
@@ -175,7 +175,7 @@ void EBST::solveCubic() {
 		const auto x1 = -t1 + s + t;
 		const auto x23r = -t2;
 
-		ExpressionResult res1{ m_unknownOperandName + "1", trimToStringDouble(x1) };
+		ExpressionResult res1{ m_unknownOperandName + "1", trimDoubleToString(x1) };
 		ExpressionResult res2{ m_unknownOperandName + "2", complexToString(std::complex<double>(x23r, t3)) };
 		ExpressionResult res3{ m_unknownOperandName + "3", complexToString(std::complex<double>(x23r, -t3)) };
 

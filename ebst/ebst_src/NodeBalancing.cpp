@@ -8,7 +8,7 @@ EBST::NodePtr EBST::buildBalancedTree(const NodePtr& node, SubtreesByDegree& deg
 	NodePtr balancedTree;
 	if (node) {
 		splitSubtreesByDegree(node, degreeSubtrees);
-		const auto rootTreeVec = spreadSubtrees(degreeSubtrees);
+		const auto rootTreeVec = spreadSubtrees(degreeSubtrees);		
 		balancedTree = buildTreeFromVectorOfNodes(rootTreeVec, false, true);
 	}
 
@@ -16,7 +16,7 @@ EBST::NodePtr EBST::buildBalancedTree(const NodePtr& node, SubtreesByDegree& deg
 
 	// if all simplified to zero
 	if (!balancedTree) {
-		auto zero = allocateNode(ExpressionNode(0.0));
+		auto zero = allocateNode(std::make_shared<NumberNode>(0.0));
 		degreeSubtrees[0].push_back({ zero, OperatorType::Addition, false });
 		return zero;
 	}
@@ -54,13 +54,15 @@ void EBST::distributeSubtrees(
 	auto isAddSubOperator = [](const NodePtr& ptr) {
 		const auto expr = ptr->m_keyValue.first;
 
-		if (!isOperator(expr)) {
+		if (!expr->castToOperatorNode()) {
 			return false;
 		}
 
-		const auto opType = expr.operatorType();
+		const auto opType = expr->castToOperatorNode()->type();
 		return opType == OperatorType::Substitution || opType == OperatorType::Addition;
 	};
+
+	const auto s = outputInfix(node, false);
 
 	if (left && right) {
 		const auto nodeIsAddSub = isAddSubOperator(node);
@@ -92,20 +94,23 @@ void EBST::distributeSubtrees(
 			return;
 		}
 
-		const auto nodeOp = node->m_keyValue.first.operatorType();
+		const auto nodePtr = node->m_keyValue.first->castToOperatorNode();
+		assert(nodePtr);
+		const auto nodeOp = nodePtr->type();
 
 		distributeSubtrees(left, degreeSubtrees, nodeOp, parentOp, true);
 		distributeSubtrees(right, degreeSubtrees, nodeOp, parentOp, false);
 		return;
 	}
 
-	if (isOperator(node->m_keyValue.first)) {
+	if (node->m_keyValue.first->castToOperatorNode()) {
 		return;
 	}
 
-	const auto isUnknown = isOperandUnknown(node->m_keyValue.first.operandValue());
+	const auto isUnknown = node->m_keyValue.first->castToUnknownNode();
+	const auto numberNode = node->m_keyValue.first->castToNumberNode();
 
-	if (!isUnknown && node->m_keyValue.first.operandValue().value == 0.0) {
+	if (!isUnknown && numberNode && numberNode->value() == 0.0) {
 		return;
 	}
 
@@ -130,7 +135,7 @@ void EBST::insertNodeIntoDegreeSubtreesMap(
 
 std::vector<EBST::SubtreeWithOperator> EBST::spreadSubtrees(SubtreesByDegree& degreeSubtrees) {
 	const auto nodeIsNumberZero = [this](const NodePtr& node) {
-		return getRuleForNode(node) == NumberVar && getExpressionNode(node).operandValue().value == 0.0;
+		return getRuleForNode(node) == NumberVar && getExpressionNode(node)->castToNumberNode()->value() == 0.0;
 	};
 
 	auto countDeg = 0;
@@ -167,19 +172,26 @@ EBST::NodePtr EBST::uniteSubtrees(std::vector<SubtreeWithOperator>& vec, int deg
 
 		switch (degree) {
 		case 0: {
-			value = node->m_keyValue.first.operandValue().value;
+			const auto numNode = getExpressionNode(node)->castToNumberNode();
+			assert(numNode);
+			value = numNode->value();
 			break;
 		}
 		case 1: {
 			if (nodeRule != NodeRule::UnknownVar) {
 				if (getRuleForNode(node) == NodeRule::DivisionModulo
 				    && getRuleForNode(node->m_left) == NodeRule::UnknownVar) {
-					value = node->m_right->m_keyValue.first.operandValue().value;
-					value = node->m_keyValue.first.operatorType() == OperatorType::Modulo
+					const auto numNode = getExpressionNode(node->m_right)->castToNumberNode();
+					const auto opNode = getExpressionNode(node)->castToOperatorNode();
+					assert(numNode && opNode);
+					value = numNode->value();
+					value = opNode->type() == OperatorType::Modulo
 					        ? std::remainder(1.0, value)
 					        : (1.0 / value);
 				} else {
-					value = node->m_left->m_keyValue.first.operandValue().value;
+					const auto numNode = getExpressionNode(node->m_left)->castToNumberNode();
+					assert(numNode);
+					value = numNode->value();
 				}
 			} else {
 				value = 1.0;
@@ -189,7 +201,9 @@ EBST::NodePtr EBST::uniteSubtrees(std::vector<SubtreeWithOperator>& vec, int deg
 		case 2:
 		case 3: {
 			if (nodeRule != NodeRule::UnknownAndNumberPow) {
-				value = node->m_left->m_keyValue.first.operandValue().value;
+				const auto numNode = getExpressionNode(node->m_left)->castToNumberNode();
+				assert(numNode);
+				value = numNode->value();
 			} else {
 				value = 1.0;
 			}
@@ -225,7 +239,7 @@ EBST::NodePtr EBST::buildTreeFromVectorOfNodes(
 
 		auto next = std::next(it, 1);
 		if (next != vec.cend()) {
-			auto opNode = allocateNode(ExpressionNode(next->op));
+			auto opNode = allocateNode(std::make_shared<OperatorNode>(next->op));
 
 			opNode->m_left = subtree;
 			opNode->m_right = buildTreeFromVectorOfNodes(std::vector(next, vec.cend()), true);
@@ -238,8 +252,8 @@ EBST::NodePtr EBST::buildTreeFromVectorOfNodes(
 		                          || !nodeHasChildren(subtree);
 
 		if (!hasParentTree && it->op == OperatorType::Substitution && nodeIsSimple && isBalancedFirst && !it->isLeft) {
-			auto op = allocateNode(ExpressionNode(OperatorType::Multiplication));
-			op->m_left = allocateNode(ExpressionNode(-1.0));
+			auto op = allocateNode(std::make_shared<OperatorNode>(OperatorType::Multiplication));
+			op->m_left = allocateNode(std::make_shared<NumberNode>(-1.0));
 			op->m_right = it->subtree;
 
 			return op;
