@@ -22,10 +22,9 @@ signals:
 	    const QString& expression,
 	    char expressionUnknown
 	);
-	void numberVariableInserted(
+	void variableInserted(
 	    const QString& varName,
-	    const QString& realPart,
-	    const QString& imagPart
+	    const QString& input
 	);
 	void errorOccured(const QString& error);
 

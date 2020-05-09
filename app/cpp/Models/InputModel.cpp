@@ -37,7 +37,7 @@ void InputModel::deductInput(const QString& input) {
 		const auto varName = varAssMatch.captured(1).toLower();
 		const auto resInput = varAssMatch.captured(2).toLower();
 		const auto replacedInput = replaceVariablesWithValues(resInput);
-		emit numberVariableInserted(varName, replacedInput, "");
+		emit variableInserted(varName, replacedInput);
 	} else if (resMatch.hasMatch()) {
 		const auto resInput = resMatch.captured(1).toLower();
 		qCDebug(L::input_model) << "Trying to resolve input:" << resInput;

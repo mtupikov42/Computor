@@ -33,14 +33,14 @@ void VariableModel::RegisterType(const char* uri) {
 	qmlRegisterUncreatableType<VariableModel>(uri, 1, 0, "VariableModel", "VariableModel must be created on C++ side");
 }
 
-VariableModel::VariableModel(const QString& varName, const QString& realPart, const QString& imagPart, QObject* parent)
+VariableModel::VariableModel(const QString& varName, const QString& input, QObject* parent)
     : QObject(parent)
     , m_name(varName)
 {
 	if (m_name == "i") {
 		m_error = tr("Variable cannot be named `i` for obvious reasons");
 	} else {
-		parseRawInput(realPart, imagPart);
+		parseRawInput(input);
 	}
 }
 
@@ -64,7 +64,11 @@ bool VariableModel::isValid() const {
 	return m_error.size() == 0;
 }
 
-void VariableModel::parseRawInput(const QString& realPart, const QString& imagPart) {
+void VariableModel::parseRawInput(const QString& input) {
+	parseNumber(input, "");
+}
+
+void VariableModel::parseNumber(const QString& realPart, const QString& imagPart) {
 	const auto doubleRegex = QString("([+-]?\\d*\\.?\\d+)");
 	const auto realNumRegex = QRegularExpression("^" + doubleRegex + "$");
 	const auto imagNumRegex = QRegularExpression("^" + doubleRegex + "i$");

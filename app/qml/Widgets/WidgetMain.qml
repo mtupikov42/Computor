@@ -43,7 +43,7 @@ Rectangle {
             historyArea.selectFunctions()
         }
 
-        onNumberVariableInserted: {
+        onVariableInserted: {
             historyArea.selectVariables()
         }
     }

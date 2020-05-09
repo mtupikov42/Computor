@@ -18,12 +18,11 @@ void ComputorCreateController::createFunction(
 	emit functionModelCreated(model);
 }
 
-void ComputorCreateController::createNumberVariable(
+void ComputorCreateController::createVariable(
     const QString& varName,
-    const QString& realPart,
-    const QString& imagPart
+    const QString& input
 ) {
-	auto model = QSharedPointer<VariableModel>::create(varName, realPart, imagPart);
+	auto model = QSharedPointer<VariableModel>::create(varName, input);
 
 	emit variableModelCreated(model);
 }

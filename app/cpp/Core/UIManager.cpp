@@ -50,7 +50,7 @@ void UIManager::setupUiModels() {
 
 	QObject::connect(m_inputModel.get(), &InputModel::expressionInserted, m_createController.get(), &ComputorCreateController::createExpression);
 	QObject::connect(m_inputModel.get(), &InputModel::functionInserted, m_createController.get(), &ComputorCreateController::createFunction);
-	QObject::connect(m_inputModel.get(), &InputModel::numberVariableInserted, m_createController.get(), &ComputorCreateController::createNumberVariable);
+	QObject::connect(m_inputModel.get(), &InputModel::variableInserted, m_createController.get(), &ComputorCreateController::createVariable);
 	QObject::connect(m_createController.get(), &ComputorCreateController::expressionModelCreated, m_expressionList.get(), &ExpressionList::add);
 	QObject::connect(m_createController.get(), &ComputorCreateController::functionModelCreated, m_functionList.get(), &FunctionList::add);
 	QObject::connect(m_createController.get(), &ComputorCreateController::variableModelCreated, m_variableList.get(), &VariableList::add);

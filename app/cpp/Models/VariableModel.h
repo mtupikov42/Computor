@@ -22,8 +22,7 @@ public:
 
 	explicit VariableModel(
 	    const QString& varName,
-	    const QString& realPart,
-	    const QString& imagPart,
+	    const QString& input,
 	    QObject* parent = nullptr
 	);
 
@@ -34,7 +33,8 @@ public:
 	bool isValid() const;
 
 private:
-	void parseRawInput(const QString& realPart, const QString& imagPart);
+	void parseRawInput(const QString& input);
+	void parseNumber(const QString& realPart, const QString& imagPart);
 
 	Type m_type;
 	QString m_name;

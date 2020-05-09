@@ -19,10 +19,9 @@ public slots:
 	    const QString& expression,
 	    char expressionUnknown
 	);
-	void createNumberVariable(
+	void createVariable(
 	    const QString& varName,
-	    const QString& realPart,
-	    const QString& imagPart
+	    const QString& input
 	);
 
 signals:
