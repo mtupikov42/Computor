@@ -29,8 +29,8 @@ std::vector<std::string> splitStringByEqualSign(const std::string& s) {
 
 } // end anonymous namespace
 
-EBST::EBST(const std::string& expressionString, bool containsEqualSign) : m_containsEqualSign(containsEqualSign) {
-	if (m_containsEqualSign) {
+EBST::EBST(const std::string& expressionString, ExpressionType type) : m_type(type) {
+	if (m_type == ExpressionType::FullExpression) {
 		auto i = 0;
 		for (const auto c : expressionString) {
 			if (c == equalSign) {
@@ -102,7 +102,7 @@ EBST::EBST(const std::string& expressionString, bool containsEqualSign) : m_cont
 		}
 	}
 
-	if (m_rootNode && m_containsEqualSign) {
+	if (m_rootNode && m_type == ExpressionType::FullExpression) {
 		solveExpression();
 	}
 }
@@ -117,7 +117,7 @@ std::string EBST::toString(OutputType type) const {
 	case OutputType::Prefix: output = outputPrefix(m_balancedTreeRootNode); break;
 	}
 
-	const auto suffix = m_containsEqualSign ? equalToZero : "";
+	const auto suffix = m_type == ExpressionType::FullExpression ? equalToZero : "";
 	return output + suffix;
 }
 

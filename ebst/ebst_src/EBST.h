@@ -23,6 +23,12 @@ struct ExpressionSolution {
 	std::optional<double> discriminant;
 };
 
+enum class ExpressionType {
+	FullExpression,
+	PartialExpression,
+	OnlyNumericExpression
+};
+
 class EBST final : public AbstractBST<AbstractExpressionNode::Ptr, bool> {
 public:
 	using AbstractBaseTree = AbstractBST<AbstractExpressionNode::Ptr, bool>;
@@ -35,7 +41,7 @@ public:
 		Prefix
 	};
 
-	explicit EBST(const std::string& expressionString, bool containsEqualSign = true);
+	explicit EBST(const std::string& expressionString, ExpressionType type = ExpressionType::FullExpression);
 
 	std::string toString(OutputType type = OutputType::Infix) const;
 	int maxDegree() const;
@@ -194,7 +200,7 @@ private:
 	ExpressionSolution m_solution;
 	int m_maxDegree = 0;
 	bool m_isBalanced = false;
-	bool m_containsEqualSign = false;
+	ExpressionType m_type;
 	std::string m_unknownOperandName = { invalidUnknownNodeName };
 
 	// unused stuff

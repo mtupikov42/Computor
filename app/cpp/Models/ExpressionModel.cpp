@@ -85,9 +85,10 @@ bool ExpressionModel::treeIsValid() const {
 
 void ExpressionModel::parseRawExpression(const QString& rawExpression, bool inFunction) {
 	m_rawExpression = rawExpression;
+	ExpressionType type = inFunction ? ExpressionType::PartialExpression : ExpressionType::FullExpression;
 
 	try {
-		EBST ebst(m_rawExpression.toStdString(), !inFunction);
+		EBST ebst(m_rawExpression.toStdString(), type);
 		m_expressionTree = std::move(ebst);
 		qCDebug(L::expression_model) << "Tree was parsed successfully";
 	} catch (const ExpressionException& ex) {
