@@ -41,7 +41,7 @@ public:
 		Prefix
 	};
 
-	explicit EBST(const std::string& expressionString, ExpressionType type = ExpressionType::FullExpression);
+	explicit EBST(const std::string& expressionString, ExpressionType type);
 
 	std::string toString(OutputType type = OutputType::Infix) const;
 	int maxDegree() const;

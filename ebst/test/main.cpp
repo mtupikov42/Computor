@@ -90,7 +90,7 @@ void operatorTest() {
 
 void ebstTest() {
 	try {
-		const auto tree = EBST("x - x + x * x - 10 * (10 * x) = 0");
+		const auto tree = EBST("x - x + x * x - 10 * (10 * x) = 0", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("-100.0 * x + x ^ 2.0 = 0") == 0);
 
@@ -113,7 +113,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("x ^ 2 - 10 * x + 5 * x ^ 2 = -10 + 5 * x + x ^ 2 - x");
+		const auto tree = EBST("x ^ 2 - 10 * x + 5 * x ^ 2 = -10 + 5 * x + x ^ 2 - x", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("10.0 - 14.0 * x + 5.0 * x ^ 2.0 = 0") == 0);
 
@@ -136,7 +136,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("(x^2 + (-10.123450 * 660000) + x / 100) = 0");
+		const auto tree = EBST("(x^2 + (-10.123450 * 660000) + x / 100) = 0", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("-6681477.0 + 0.010 * x + x ^ 2.0 = 0") == 0);
 
@@ -159,7 +159,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("-10 * x^2 - -4 * x + 7 + x = 0");
+		const auto tree = EBST("-10 * x^2 - -4 * x + 7 + x = 0", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("7.0 + 5.0 * x - 10.0 * x ^ 2.0 = 0") == 0);
 
@@ -182,7 +182,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("x ^ 2 = x ^ 2");
+		const auto tree = EBST("x ^ 2 = x ^ 2", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("0.0 = 0") == 0);
 		assert(tree.solution().solutions.size() == 0);
@@ -192,7 +192,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("(x ^ 2) * 11 - (x ^ 2) * 2 = 0");
+		const auto tree = EBST("(x ^ 2) * 11 - (x ^ 2) * 2 = 0", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("9.0 * x ^ 2.0 = 0") == 0);
 
@@ -212,7 +212,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("x ^ 2 + 7.3 * x = -1 * x ^ 2 + 10 - 5 * x");
+		const auto tree = EBST("x ^ 2 + 7.3 * x = -1 * x ^ 2 + 10 - 5 * x", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("-10.0 + 12.30 * x + 2.0 * x ^ 2.0 = 0") == 0);
 
@@ -235,7 +235,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("5 * x ^ 0 + 4 * x^1 - 9.3 * x ^ 2 - 1 * x^0 = 0");
+		const auto tree = EBST("5 * x ^ 0 + 4 * x^1 - 9.3 * x ^ 2 - 1 * x^0 = 0", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("4.0 + 4.0 * x - 9.30 * x ^ 2.0 = 0") == 0);
 
@@ -258,7 +258,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("x * 4 - x ^ 2 * 4 = 0");
+		const auto tree = EBST("x * 4 - x ^ 2 * 4 = 0", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("4.0 * x - 4.0 * x ^ 2.0 = 0") == 0);
 
@@ -281,7 +281,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("5 * x^0 + 4 * x^1 - 4 * x^0 = 0");
+		const auto tree = EBST("5 * x^0 + 4 * x^1 - 4 * x^0 = 0", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("1.0 + 4.0 * x = 0") == 0);
 
@@ -301,7 +301,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("5 + 4 * x + x^2- x^2 = 0");
+		const auto tree = EBST("5 + 4 * x + x^2- x^2 = 0", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("5.0 + 4.0 * x = 0") == 0);
 
@@ -321,7 +321,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("-3.14 * x ^ 3 - x ^ 2 + 10 * x - 5 = 3.6 - 2.7 - 2.98 * x + 0.001 * x ^ 2 - x ^ 3");
+		const auto tree = EBST("-3.14 * x ^ 3 - x ^ 2 + 10 * x - 5 = 3.6 - 2.7 - 2.98 * x + 0.001 * x ^ 2 - x ^ 3", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("-5.90 + 12.980 * x - 1.0010 * x ^ 2.0 - 2.140 * x ^ 3.0 = 0") == 0);
 
@@ -346,7 +346,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("5 * x^0 - 5 * x^0 = 0");
+		const auto tree = EBST("5 * x^0 - 5 * x^0 = 0", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("0.0 = 0") == 0);
 		assert(tree.solution().solutions.size() == 0);
@@ -356,7 +356,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("5 * x^0 - 4 * x^0 - 7 * x^1 = 0");
+		const auto tree = EBST("5 * x^0 - 4 * x^0 - 7 * x^1 = 0", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("1.0 - 7.0 * x = 0") == 0);
 
@@ -376,7 +376,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("5 * x^0 + 13 * x^1 + 3 * x^2 - 1* x^0 - 1 * x^1 = 0");
+		const auto tree = EBST("5 * x^0 + 13 * x^1 + 3 * x^2 - 1* x^0 - 1 * x^1 = 0", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("4.0 + 12.0 * x + 3.0 * x ^ 2.0 = 0") == 0);
 
@@ -399,7 +399,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("6 * x^0 + 11 * x^1 + 5 * x^2 - 1 * x^0 - 1 * x^1 = 0");
+		const auto tree = EBST("6 * x^0 + 11 * x^1 + 5 * x^2 - 1 * x^0 - 1 * x^1 = 0", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("5.0 + 10.0 * x + 5.0 * x ^ 2.0 = 0") == 0);
 
@@ -419,7 +419,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("5 * x^0 + 3 * x^1 + 3 * x^2 - 1 * x^0 + 0 * x^1 = 0");
+		const auto tree = EBST("5 * x^0 + 3 * x^1 + 3 * x^2 - 1 * x^0 + 0 * x^1 = 0", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("4.0 + 3.0 * x + 3.0 * x ^ 2.0 = 0") == 0);
 
@@ -442,7 +442,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("8 * x^0 - 6 * x^1 + 0 * x^2 - 5.6 * x^3 - 3 * x^0 = 0");
+		const auto tree = EBST("8 * x^0 - 6 * x^1 + 0 * x^2 - 5.6 * x^3 - 3 * x^0 = 0", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("5.0 - 6.0 * x - 5.60 * x ^ 3.0 = 0") == 0);
 
@@ -467,7 +467,7 @@ void ebstTest() {
 	}
 
 	try {
-		const auto tree = EBST("4 * x ^ 3 - 10 * x ^ 2 + 9.46 * x - 90.5 = 0");
+		const auto tree = EBST("4 * x ^ 3 - 10 * x ^ 2 + 9.46 * x - 90.5 = 0", ExpressionType::FullExpression);
 		const auto treeToString = tree.toString(EBST::OutputType::Infix);
 		assert(treeToString.compare("-90.50 + 9.460 * x - 10.0 * x ^ 2.0 + 4.0 * x ^ 3.0 = 0") == 0);
 
@@ -493,94 +493,112 @@ void ebstTest() {
 
 	// invalid scenarios
 	try {
-		const auto tree = EBST("x = ");
+		const auto tree = EBST("x = ", ExpressionType::FullExpression);
 		assert(false && "did not caught empty expression");
-	} catch (const ExpressionException&) {}
+	} catch (const ExpressionException& ex) {
+		assert(ex.errorType() == ExpressionError::InvalidToken);
+	}
 
 	try {
-		const auto tree = EBST("x^2 + 5 * x");
+		const auto tree = EBST("x^2 + 5 * x", ExpressionType::FullExpression);
 		assert(false && "did not caught no equal sign");
-	} catch (const ExpressionException&) {}
+	} catch (const ExpressionException& ex) {
+		assert(ex.errorType() == ExpressionError::NoEqualSign);
+	}
 
 	try {
-		const auto tree = EBST("x^2 = 4 * x = 3 - x");
+		const auto tree = EBST("x^2 = 4 * x = 3 - x", ExpressionType::FullExpression);
 		assert(false && "did not caught multiple equal signs");
-	} catch (const ExpressionException&) {}
+	} catch (const ExpressionException& ex) {
+		assert(ex.errorType() == ExpressionError::TooManyEqualSigns);
+	}
 
 	try {
-		const auto tree = EBST("x^2 - 4 * y + 5 * x = 0");
+		const auto tree = EBST("x^2 - 4 * y + 5 * x = 0", ExpressionType::FullExpression);
 		assert(false && "did not caught multiple unknowns");
 	} catch (const ExpressionException&) {}
 
     try {
-		const auto tree = EBST("x^2 - 4x + 7 + x = 0");
+		const auto tree = EBST("x^2 - 4x + 7 + x = 0", ExpressionType::FullExpression);
         assert(false && "did not caught missing operator");
-	} catch (const ExpressionException&) {}
+	} catch (const ExpressionException& ex) {
+		assert(ex.errorType() == ExpressionError::MissingOperator);
+	}
 
     try {
-		const auto tree = EBST("xd^2 - 4 * x + 7 + x = 0");
+		const auto tree = EBST("xd^2 - 4 * x + 7 + x = 0", ExpressionType::FullExpression);
         assert(false && "did not caught multiple char variable");
-	} catch (const ExpressionException&) {}
+	} catch (const ExpressionException& ex) {
+		assert(ex.errorType() == ExpressionError::UnknownOperandSize);
+	}
 
     try {
-		const auto tree = EBST("(x + 10 = 0");
+		const auto tree = EBST("(x + 10 = 0", ExpressionType::FullExpression);
         assert(false && "did not caught missing ')' bracket");
-	} catch (const ExpressionException&) {}
+	} catch (const ExpressionException& ex) {
+		assert(ex.errorType() == ExpressionError::MissingRightParentheses);
+	}
 
     try {
-		const auto tree = EBST("x + 10) = 0");
+		const auto tree = EBST("x + 10) = 0", ExpressionType::FullExpression);
         assert(false && "did not caught missing '(' bracket");
-	} catch (const ExpressionException&) {}
+	} catch (const ExpressionException& ex) {
+		assert(ex.errorType() == ExpressionError::MissingLeftParentheses);
+	}
 
     try {
-		const auto tree = EBST("10 ? 2 = 0");
+		const auto tree = EBST("10 ? 2 = 0", ExpressionType::FullExpression);
         assert(false && "did not caught invalid operator");
 	} catch (const ExpressionException&) {}
 
     try {
-		const auto tree = EBST("10.312.312.312 + 543.534543.543 = 0");
+		const auto tree = EBST("10.312.312.312 + 543.534543.543 = 0", ExpressionType::FullExpression);
         assert(false && "did not caught invalid operand");
-	} catch (const ExpressionException&) {}
+	} catch (const ExpressionException& ex) {
+		assert(ex.errorType() == ExpressionError::InvalidToken);
+	}
 
 	try {
-		const auto tree = EBST("10 / (x - 2) + 10 * x ^ 2 = 0");
+		const auto tree = EBST("10 / (x - 2) + 10 * x ^ 2 = 0", ExpressionType::FullExpression);
 		assert(false && "did not caught too complex division");
-	} catch (const ExpressionException&) {}
+	} catch (const ExpressionException& ex) {
+		assert(ex.errorType() == ExpressionError::TooComplexDivision);
+	}
 
 	try {
-		const auto tree = EBST("3 ^ (x - 20) + 20 * x = 0");
+		const auto tree = EBST("3 ^ (x - 20) + 20 * x = 0", ExpressionType::FullExpression);
 		assert(false && "did not caught too complex degree");
-	} catch (const ExpressionException&) {}
+	} catch (const ExpressionException& ex) {
+		assert(ex.errorType() == ExpressionError::TooComplexDegree);
+	}
 
 	try {
-		const auto tree = EBST("x / (x - 2) + 10 * x ^ 2 = 0");
+		const auto tree = EBST("(x / 100) / (x - 2) + 10 * x ^ 2 = 0", ExpressionType::FullExpression);
 		assert(false && "did not caught too complex division");
-	} catch (const ExpressionException&) {}
+	} catch (const ExpressionException& ex) {
+		assert(ex.errorType() == ExpressionError::TooComplexDivision);
+	}
 
 	try {
-		const auto tree = EBST("x ^ (x - 20) + 20 * x = 0");
+		const auto tree = EBST("(x / 100) ^ (x - 20) + 20 * x = 0", ExpressionType::FullExpression);
 		assert(false && "did not caught too complex degree");
-	} catch (const ExpressionException&) {}
+	} catch (const ExpressionException& ex) {
+		assert(ex.errorType() == ExpressionError::TooComplexDegree);
+	}
 
 	try {
-		const auto tree = EBST("(x / 100) / (x - 2) + 10 * x ^ 2 = 0");
-		assert(false && "did not caught too complex division");
-	} catch (const ExpressionException&) {}
-
-	try {
-		const auto tree = EBST("(x / 100) ^ (x - 20) + 20 * x = 0");
-		assert(false && "did not caught too complex degree");
-	} catch (const ExpressionException&) {}
-
-	try {
-		const auto tree = EBST("4 * x^0 - 8 * x^0 = 0");
+		const auto tree = EBST("4 * x^0 - 8 * x^0 = 0", ExpressionType::FullExpression);
 		assert(false && "did not caught unsolving expresion");
-	} catch (const ExpressionException&) {}
+	} catch (const ExpressionException& ex) {
+		assert(ex.errorType() == ExpressionError::Unsolvable);
+	}
 
 	try {
-		const auto tree = EBST("8 * x^0 - 6 * x^1 + 0 * x^2 - 5.6 * x^4 - 3 * x^3 = 0");
+		const auto tree = EBST("8 * x^0 - 6 * x^1 + 0 * x^2 - 5.6 * x^4 - 3 * x^3 = 0", ExpressionType::FullExpression);
 		assert(false && "uncought degree higher than three");
-	} catch (const ExpressionException&) {}
+	} catch (const ExpressionException& ex) {
+		assert(ex.errorType() == ExpressionError::DegreeHigherThanThree);
+	}
 
     std::cout << "Tree OK" << std::endl;
 }
