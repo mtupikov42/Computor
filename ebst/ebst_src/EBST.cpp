@@ -227,7 +227,9 @@ std::vector<AbstractExpressionNode::Ptr> EBST::parseExpression(const std::string
             }
 
 			const auto ch = static_cast<char>(std::tolower(strVal.front()));
-			unknownOperands.insert(ch);
+			if (ch != ImaginaryNumberNode::imaginaryUnit) {
+				unknownOperands.insert(ch);
+			}
 			if (unknownOperands.size() > 1) {
 				throw ExpressionException(ExpressionError::MultipleUnknownOperands, getErrorColumn(castedDistance(expr.cbegin(), it)));
 			}
@@ -319,6 +321,10 @@ std::vector<AbstractExpressionNode::Ptr> EBST::parseExpression(const std::string
         } else {
 			pOp = readToken(it, lastExpressionNode);
 			if (pOp) {
+				if (m_type != ExpressionType::OnlyNumericExpression && pOp->castToImaginaryNumberNode()) {
+					throw ExpressionException(ExpressionError::ImaginaryNumberInExpressionWithUnknown, getErrorColumn(castedDistance(expr.cbegin(), it)));
+				}
+
 				output.push_back(pOp);
             } else {
 				throw ExpressionException(ExpressionError::InvalidToken, getErrorColumn(castedDistance(expr.cbegin(), it)));

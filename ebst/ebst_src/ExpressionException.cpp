@@ -27,7 +27,8 @@ std::string ExpressionException::toString() const {
 		{ ExpressionError::TooComplexDegree, "Too complex expression in degree" },
 		{ ExpressionError::MultipleUnknownOperands, "Multiple unknown operands" },
 		{ ExpressionError::Unsolvable, "Expression has no solutions" },
-		{ ExpressionError::DegreeHigherThanThree, "Degree is higher than three" }
+		{ ExpressionError::DegreeHigherThanThree, "Degree is higher than three" },
+		{ ExpressionError::ImaginaryNumberInExpressionWithUnknown, "Imaginary number cannot be in expression with unknown variable" }
 	};
 
 	auto it = errorToStringMap.find(m_type);

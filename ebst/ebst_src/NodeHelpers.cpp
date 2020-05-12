@@ -69,6 +69,10 @@ EBST::NodePtr EBST::createNodeByDegreeAndValue(double value, int degree) const {
 }
 
 AbstractExpressionNode::Ptr EBST::getExpressionNode(const NodePtr& ptr) const {
+	if (!ptr) {
+		return nullptr;
+	}
+
 	return ptr->m_keyValue.first;
 }
 

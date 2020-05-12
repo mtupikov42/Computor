@@ -40,6 +40,10 @@ AbstractExpressionNode::Ptr parseExpressionFromString(const std::string& str) {
 		const auto varName = sm[1].str();
 		assert(varName.length() == 1);
 
+		if (varName[0] == ImaginaryNumberNode::imaginaryUnit) {
+			return std::make_shared<ImaginaryNumberNode>();
+		}
+
 		return std::make_shared<UnknownNode>(varName[0]);
 	} else if (std::regex_match(str, sm, std::regex(numberRegex))) {
 		assert(!sm.empty());
@@ -67,10 +71,6 @@ AbstractExpressionNode::Ptr parseExpressionFromChar(char c) {
 	const auto it = charToOperandType.find(c);
 	if (it != charToOperandType.cend()) {
 		return std::make_shared<OperatorNode>(charToOperandType.at(c));
-	}
-
-	if (c == 'i') {
-		return std::make_shared<ImaginaryNumberNode>();
 	}
 
 	return nullptr;

@@ -6,6 +6,7 @@ enum class ExpressionError {
 	CannotBalance,
 	DegreeHigherThanThree,
 	DivisionByZero,
+	ImaginaryNumberInExpressionWithUnknown,
 	InvalidToken,
 	LeftBracketError,
 	MissingLeftParentheses,

@@ -244,6 +244,10 @@ EBST::NodeRule EBST::getRuleForSubtree(const NodePtr& node) const {
 }
 
 EBST::NodeRule EBST::getRuleForNode(const NodePtr& node) const {
+	if (!node) {
+		return NodeRule::NoRule;
+	}
+
 	const auto expr = getExpressionNode(node);
 
 	if (expr->castToNumberNode()) {
@@ -261,6 +265,8 @@ EBST::NodeRule EBST::getRuleForNode(const NodePtr& node) const {
 		} else if (opType == OperatorType::Power) {
 			return NodeRule::Power;
 		}
+	} else if (expr->castToImaginaryNumberNode()) {
+		return NodeRule::ImaginaryVar;
 	}
 
 	return NodeRule::NoRule;

@@ -70,6 +70,7 @@ private:
 		AdditionSubstitution = 1 << 4, // +-
 		DivisionModulo = 1 << 5, // /%
 		Power = 1 << 6, // ^
+		ImaginaryVar = 1 << 7, // i
 
 		NoRule = 1 << 10,
 
@@ -172,16 +173,16 @@ private:
 	NodeRule validateRules(NodeRule rule1, NodeRule rule2, NodeRule rule3) const;
 
 	// NodeHelpers.cpp
+	AbstractExpressionNode::Ptr getExpressionNode(const NodePtr& ptr) const;
+	bool nodeHasChildren(const NodePtr& node) const;
+	bool nodeHasUnknownExpr(const NodePtr& ptr) const;
+	bool subTreesAreEqual(const NodePtr& n1, const NodePtr& n2) const;
+	double retrieveNumberFromNode(const NodePtr& node, OperatorType prevOp, bool isFirst) const;
+	int calculateMaxDegree() const;
+	int countUnknownVars(const NodePtr& node) const;
+	int getMaximumPowerOfSubtree(const NodePtr& node) const;
 	NodePtr allocateNode(const AbstractExpressionNode::Ptr& node) const;
 	NodePtr createNodeByDegreeAndValue(double value, int degree) const;
-	AbstractExpressionNode::Ptr getExpressionNode(const NodePtr& ptr) const;
-	bool subTreesAreEqual(const NodePtr& n1, const NodePtr& n2) const;
-	bool nodeHasUnknownExpr(const NodePtr& ptr) const;
-	int getMaximumPowerOfSubtree(const NodePtr& node) const;
-	int countUnknownVars(const NodePtr& node) const;
-	bool nodeHasChildren(const NodePtr& node) const;
-	int calculateMaxDegree() const;
-	double retrieveNumberFromNode(const NodePtr& node, OperatorType prevOp, bool isFirst) const;
 	void mirrorNodeSign(SubtreeWithOperator& ptr);
 	void mirrorNodeSignByPrevOp(NodePtr& node, OperatorType& op);
 

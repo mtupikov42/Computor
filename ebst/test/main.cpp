@@ -600,6 +600,13 @@ void ebstTest() {
 		assert(ex.errorType() == ExpressionError::DegreeHigherThanThree);
 	}
 
+	try {
+		const auto tree = EBST("x ^ 2 * 2 + 8 * i - 10 = 0", ExpressionType::FullExpression);
+		assert(false && "uncought imaginary number in expression with unknown");
+	} catch (const ExpressionException& ex) {
+		assert(ex.errorType() == ExpressionError::ImaginaryNumberInExpressionWithUnknown);
+	}
+
     std::cout << "Tree OK" << std::endl;
 }
 
