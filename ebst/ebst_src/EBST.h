@@ -172,7 +172,7 @@ private:
 	NodeRule validateRules(NodeRule rule1, NodeRule rule2, NodeRule rule3) const;
 
 	// NodeHelpers.cpp
-	static NodePtr allocateNode(const AbstractExpressionNode::Ptr& node);
+	NodePtr allocateNode(const AbstractExpressionNode::Ptr& node) const;
 	NodePtr createNodeByDegreeAndValue(double value, int degree) const;
 	AbstractExpressionNode::Ptr getExpressionNode(const NodePtr& ptr) const;
 	bool subTreesAreEqual(const NodePtr& n1, const NodePtr& n2) const;

@@ -12,7 +12,7 @@ OperatorType switchAddSubOp(OperatorType type) {
 
 } // end anonymous namespace
 
-EBST::NodePtr EBST::allocateNode(const AbstractExpressionNode::Ptr& node) {
+EBST::NodePtr EBST::allocateNode(const AbstractExpressionNode::Ptr& node) const {
 	auto pair = std::make_pair(node, false);
 	return std::make_shared<EBST::Node>(pair);
 }
