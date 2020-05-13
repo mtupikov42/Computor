@@ -27,24 +27,11 @@ void InputModel::deductInput(const QString& input) {
 
 	const auto functionPattern = QRegularExpression("^" + functionStringReg + "=(.+)$");
 	const auto resolutionPattern = QRegularExpression("^\\s*(.+)\\s*=\\s*\\?\\s*$");
-	const auto variableAssignPattern = QRegularExpression("^\\s*(\\w+)\\s*=(.*)$");
 
 	const auto funcMatch = functionPattern.match(input);
 	const auto resMatch = resolutionPattern.match(input);
-	const auto varAssMatch = variableAssignPattern.match(input);
 
-	if (varAssMatch.hasMatch()) {
-		const auto varName = varAssMatch.captured(1).toLower();
-
-		if (!nameIsUnique(m_funcList->validFunctionsNames(), varName)) {
-			emit errorOccured(tr("Variable cannot be named as existing function"));
-			return;
-		}
-
-		const auto resInput = varAssMatch.captured(2).toLower();
-		const auto replacedInput = replaceVariablesWithValues(resInput);
-		emit variableInserted(varName, replacedInput);
-	} else if (resMatch.hasMatch()) {
+	if (resMatch.hasMatch()) {
 		const auto resInput = resMatch.captured(1).toLower();
 		qCDebug(L::input_model) << "Trying to resolve input:" << resInput;
 		tryToResolve(resInput);
